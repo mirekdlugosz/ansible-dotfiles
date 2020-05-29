@@ -1,0 +1,70 @@
+- name: Checking if bat is available
+  command: bat --version
+  register: cmd_bat_installed
+  ignore_errors: True
+
+- name: Checking bat version
+  shell: "bat --version | awk 'NR==1 {print $2}'"
+  register: cmd_bat_version
+  when: cmd_bat_installed.rc == 0
+
+- set_fact:
+    bat_installation_required: True
+  when: cmd_bat_installed.rc != 0 or cmd_bat_version.stdout != bat_version
+
+- set_fact:
+    bat_installation_required: False
+  when: bat_installation_required is undefined
+
+- name: Preparing tmp directory
+  tempfile:
+    state: directory
+    suffix: bat
+  register: bat_tmp_dir
+  when: bat_installation_required
+
+- name: Downloading bat archive
+  get_url:
+    url: "{{ bat_archive_url }}"
+    dest: "{{ bat_tmp_dir.path }}/{{ bat_archive }}"
+  when: bat_installation_required
+
+- name: Extracting bat archive
+  unarchive:
+    src: "{{ bat_tmp_dir.path }}/{{ bat_archive }}"
+    dest: "{{ bat_tmp_dir.path }}"
+    remote_src: yes
+  when: bat_installation_required
+
+- name: Find extracted bat executable
+  find:
+    paths: "{{ bat_tmp_dir.path }}"
+    patterns: "^bat$"
+    recurse: yes
+    use_regex: yes
+  register: bat_find_results
+  when: bat_installation_required
+
+- name: Installing bat
+  command: "cp {{ item.path }} {{ path_local_bin }}/bat"
+  with_items: "{{ bat_find_results.files }}"
+  when: bat_installation_required
+
+- name: Ensuring correct executable permissions
+  file:
+    path: "{{ path_local_bin }}/bat"
+    mode: "0775"
+  when: bat_installation_required
+
+- name: Creating 'cat' -> 'bat' link in local bin directory
+  file:
+    src: "{{ path_local_bin }}/bat"
+    dest: "{{ path_local_bin }}/cat"
+    state: link
+  when: bat_installation_required
+
+- name: Clean up build directory
+  file:
+    path: "{{ bat_tmp_dir.path }}"
+    state: absent
+  when: bat_installation_required

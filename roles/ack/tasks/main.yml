@@ -1,0 +1,5 @@
+- import_tasks: build.yml
+  when: ansible_os_family == "RedHat"
+
+- name: Copy ackrc file
+  copy: src=_ackrc dest=~/.ackrc

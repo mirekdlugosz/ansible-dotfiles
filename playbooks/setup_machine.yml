@@ -1,0 +1,39 @@
+- name: Set up development environment
+  hosts: all
+  roles:
+    - role: shell
+      tags:
+        - shell
+    - role: ack
+      tags:
+        - ack
+    - role: bat
+      tags:
+        - bat
+    - role: direnv
+      tags:
+        - direnv
+    - role: fd
+      tags:
+        - fd
+    - role: fzf
+      tags:
+        - fzf
+    - role: git
+      tags:
+        - git
+    - role: npm
+      tags:
+        - npm
+    - role: R
+      tags:
+        - R
+    - role: starship
+      tags:
+        - starship
+    - role: vim
+      tags:
+        - vim
+    - role: z.lua
+      tags:
+        - z.lua

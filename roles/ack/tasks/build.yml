@@ -1,0 +1,59 @@
+- name: Checking if ack is available
+  command: ack --version
+  register: cmd_ack_installed
+  ignore_errors: True
+
+- name: Checking ack version
+  shell: "ack --version | awk 'NR==1 {print $2}'"
+  register: cmd_ack_version
+  when: cmd_ack_installed.rc == 0
+
+- set_fact:
+    ack_installation_required: True
+  when: cmd_ack_installed.rc != 0 or cmd_ack_version.stdout != ack_version
+
+- set_fact:
+    ack_installation_required: False
+  when: ack_installation_required is undefined
+
+- name: Installing ack dependency
+  yum:
+    name: perl-File-Next
+    state: present
+  when:
+    - ack_installation_required
+    - ansible_os_family == "RedHat"
+
+- name: Preparing build directory
+  tempfile:
+    state: directory
+    suffix: ack
+  register: ack_build_dir
+  when: ack_installation_required
+
+- name: Cloning ack
+  git:
+    repo: "{{ ack_git_repo }}"
+    dest: "{{ ack_build_dir.path }}"
+    version: "{{ ack_version }}"
+  when: ack_installation_required
+
+- name: Building ack
+  command:
+    cmd: "{{ item }}"
+    chdir: "{{ ack_build_dir.path }}"
+  loop:
+    - "perl Makefile.PL"
+    - "make"
+    - "make ack-standalone"
+  when: ack_installation_required
+
+- name: Installing ack
+  command: "cp {{ ack_build_dir.path }}/ack-standalone {{ path_local_bin }}/ack"
+  when: ack_installation_required
+
+- name: Clean up build directory
+  file:
+    path: "{{ ack_build_dir.path }}"
+    state: absent
+  when: ack_installation_required

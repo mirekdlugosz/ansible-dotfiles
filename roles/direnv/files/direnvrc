@@ -1,0 +1,21 @@
+layout_python-venv() {
+	local python=${1:-python3}
+	[[ $# -gt 0 ]] && shift
+	unset PYTHONHOME
+	if [[ -n $VIRTUAL_ENV ]]; then
+		VIRTUAL_ENV=$(readlink -f "${VIRTUAL_ENV}")
+	else
+		VIRTUAL_ENV=$HOME/.virtualenvs/$(basename $(readlink -f .))
+	fi
+	export VIRTUAL_ENV
+
+	if [[ ! -d $VIRTUAL_ENV ]]; then
+		log_status "no venv found; creating $VIRTUAL_ENV"
+		if [[ $python =~ "python3" ]]; then
+			"$python" -m venv "$VIRTUAL_ENV"
+		else
+			virtualenv "$VIRTUAL_ENV"
+		fi
+	fi
+	PATH_add "$VIRTUAL_ENV/bin"
+}

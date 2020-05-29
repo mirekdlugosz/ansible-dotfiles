@@ -1,0 +1,5 @@
+- name: Create target directory
+  file: path={{ config_dir }} state=directory mode=0755
+
+- name: Copy direnvrc file
+  copy: src=direnvrc dest={{ config_dir }}/direnvrc
