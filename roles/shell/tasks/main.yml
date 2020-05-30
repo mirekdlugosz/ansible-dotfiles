@@ -4,6 +4,12 @@
 - name: Copy profile
   template: src=_bash_profile dest=~/.bash_profile
 
+- name: Create directory for modular configuration
+  file:
+    path: "{{ path_shell_config }}"
+    state: directory
+    mode: 0755
+
 - name: Copy modular configuration files
   copy:
     src: "{{ item.src }}"
