@@ -1,0 +1,4 @@
+shell_additional_paths:
+  - "{{ ansible_env.HOME }}/go/bin"
+  - "{{ path_local_bin }}"
+  - "{{ path_npm_global }}"

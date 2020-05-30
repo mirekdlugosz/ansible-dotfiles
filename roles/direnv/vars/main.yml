@@ -1,1 +1,0 @@
-config_dir: "{{ path_local_config }}/direnv/"

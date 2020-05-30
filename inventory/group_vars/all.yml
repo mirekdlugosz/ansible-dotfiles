@@ -2,16 +2,64 @@ path_local_config: "{{ ansible_env.HOME }}/.config/"
 path_local_bin: "{{ ansible_env.HOME }}/.local/bin/"
 path_shell_config: "{{ path_local_config }}/shell/"
 
-path_npm_global: "{{ ansible_env.HOME }}/.npm-global"
-
+# {{{ custom roles defaults
+# {{{ ack
+ack_git_repo: "https://github.com/beyondgrep/ack3.git"
+ack_version: "v3.3.1"
+# }}}
+# {{{ bat
+bat_version: "0.15.4"
+bat_vversion: "v{{ bat_version }}"
+bat_archive: "bat-{{ bat_vversion }}-x86_64-unknown-linux-gnu.tar.gz"
+bat_archive_url: "https://github.com/sharkdp/bat/releases/download/{{ bat_vversion }}/{{ bat_archive }}"
+# }}}
+# {{{ direnv
+direnv_config_dir: "{{ path_local_config }}/direnv/"
+# }}}
+# {{{ fd 
+fd_version: "8.1.1"
+fd_vversion: "v{{ fd_version }}"
+fd_archive: "fd-{{ fd_vversion }}-x86_64-unknown-linux-gnu.tar.gz"
+fd_archive_url: "https://github.com/sharkdp/fd/releases/download/{{ fd_vversion }}/{{ fd_archive }}"
+# }}}
+# {{{ fzf
+fzf_version: "0.21.1"
+fzf_archive: "fzf-{{ fzf_version }}-linux_amd64.tgz"
+fzf_archive_url: "https://github.com/junegunn/fzf-bin/releases/download/{{ fzf_version }}/{{ fzf_archive }}"
+fzf_git_repo: "https://github.com/junegunn/fzf.git"
+# }}}
+# {{{ git
 git_email: mirek@mirekdlugosz.com
-
+# }}}
+# {{{ npm
+path_npm_global: "{{ ansible_env.HOME }}/.npm-global"
+# }}}
+# {{{ R
+r_local_lib: "{{ ansible_env.HOME }}/.local/lib/R"
+# }}}
+# {{{ shell
 shell_additional_paths:
   - "{{ path_local_bin }}"
   - "{{ path_npm_global }}"
-
-lua_binary: lua
-
+# }}}
+# {{{ starship
+starship_version: "0.41.3"
+starship_vversion: "v{{ starship_version }}"
+starship_archive: "starship-x86_64-unknown-linux-gnu.tar.gz"
+starship_archive_url: "https://github.com/starship/starship/releases/download/{{ starship_vversion }}/{{ starship_archive }}"
+# }}}
+# {{{ vim
+vim_dir: "{{ ansible_env.HOME }}/.vim"
+vimplug_git_repo: "https://github.com/junegunn/vim-plug.git"
+vim_coc_extensions_npm_args: "--global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod"
+vim_coc_extensions_dir: "{{ path_local_config }}/coc/extensions"
 vim_install_plugins: yes
 vim_coc_extensions: "coc-css coc-html coc-json coc-phpls coc-python coc-r-lsp coc-snippets coc-tsserver coc-yaml"
-vim_coc_extensions_dir: "{{ path_local_config }}/coc/extensions"
+# }}}
+# {{{ z.lua
+zlua_local_path: "{{ ansible_env.HOME }}/.local/lib/z.lua"
+zlua_git_repo: "https://github.com/skywind3000/z.lua"
+lua_binary: lua
+# }}}
+# }}}
+# vim: fdm=marker

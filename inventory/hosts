@@ -1,7 +1,9 @@
 [local]
-localhost ansible_connection=local
+localhost
 
 [work]
+rhel-csb
 
 [mydevil]
-mydevil.net
+mydevil-one
+mydevil-two

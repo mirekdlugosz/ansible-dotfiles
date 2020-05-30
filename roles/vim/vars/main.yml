@@ -1,3 +1,0 @@
-vim_dir: "{{ ansible_env.HOME }}/.vim"
-vimplug_git_repo: "https://github.com/junegunn/vim-plug.git"
-vim_coc_extensions_npm_args: "--global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod"
