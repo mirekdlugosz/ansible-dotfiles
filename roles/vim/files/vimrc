@@ -1,0 +1,283 @@
+scriptencoding utf-8
+set nocompatible " nobody cares about vi anymore
+
+"{{{ vim-plug plugin manager
+
+call plug#begin('~/.vim/plugged')
+
+" {{{ Dependencies
+" - for SnipMate
+Plug 'MarcWeber/vim-addon-mw-utils'
+" - for a lot of them
+Plug 'tomtom/tlib_vim'
+" }}}
+
+" {{{ General editing
+" Automatically surround by tags
+"Plugin 'tpope/vim-surround'
+" Useful keybindings
+Plug 'tpope/vim-unimpaired'
+
+" Auto-insert matching parentheses
+Plug 'Raimondi/delimitMate'
+
+" Access to file system - must-have on larger projects
+Plug 'scrooloose/nerdtree'
+
+" Comfortable code commenting
+Plug 'scrooloose/nerdcommenter'
+
+" Visual aid for buffer changes tree
+Plug 'mbbill/undotree'
+
+" Easier code finding
+Plug 'mileszs/ack.vim'
+
+" Sidebar with tags (variables and whatnot)
+Plug 'majutsushi/tagbar'
+
+" editorconfig
+Plug 'editorconfig/editorconfig-vim'
+
+" Fuzzy-find files and buffers by name
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+
+" }}}
+
+" {{{ Programming
+" Snippets
+Plug 'garbas/vim-snipmate'
+Plug 'honza/vim-snippets'
+
+" Linters
+Plug 'dense-analysis/ale'
+" Code completion
+"Plug 'Valloric/YouCompleteMe'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Python PEP-8
+Plug 'Vimjas/vim-python-pep8-indent'
+
+" Pandoc
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+" markdownfootnotes inserts foot notes at the end of file, which I don't like
+" too much
+"Plugin 'vim-pandoc/vim-markdownfootnotes'
+
+" TypeScript
+"Plug 'leafgarland/typescript-vim'
+
+" quick HTML and CSS
+Plug 'mattn/emmet-vim'
+
+" }}}
+
+" All of your Plugins must be added before the following line
+call plug#end()            " required
+"}}}
+" {{{ File reading settings
+" If we have a BOM, always honour that rather than trying to guess.
+if &fileencodings !~? "ucs-bom"
+  set fileencodings^=ucs-bom
+endif
+
+" Always check for UTF-8 when trying to determine encodings.
+if &fileencodings !~? "utf-8"
+  set fileencodings+=utf-8
+endif
+
+" Make sure we have a sane fallback for encoding detection
+set fileencodings+=default
+" }}}
+" {{{ Autocommands
+if has("autocmd")
+" {{{ save cursor position
+augroup vimrc
+    autocmd BufWritePost *
+    \   if expand('%') != '' && &buftype !~ 'nofile'
+    \|      mkview
+    \|  endif
+    autocmd BufRead *
+    \   if expand('%') != '' && &buftype !~ 'nofile'
+    \|      silent! loadview
+    \|  endif
+augroup END
+" }}}
+" {{{ set omnifunc, just in case
+if exists("+omnifunc")
+	autocmd Filetype *
+		\	if &omnifunc == "" |
+		\		setlocal omnifunc=syntaxcomplete#Complete |
+		\	endif
+endif
+" }}}
+endif " has("autocmd")
+" }}}
+" {{{ delimitMate - indent function definitions
+let delimitMate_expand_cr = 1
+let delimitMate_expand_space = 1
+" }}}
+"{{{ UndoTree
+let g:undotree_DiffAutoOpen = 0
+let g:undotree_SetFocusWhenToggle = 1
+let g:undotree_HighlightChangedWithSign = 0
+"}}}
+" {{{ Tagbar
+let g:tagbar_autoclose = 1
+let g:tagbar_autofocus = 1
+let g:tagbar_autoshowtag = 1
+" }}}
+" {{{ FZF
+let g:fzf_preview_window = ''
+" }}}
+" {{{ ALE - asynchrounous linters
+let g:ale_set_loclist = 1
+let g:ale_keep_list_window_open = 0
+let g:ale_lint_on_enter = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_set_signs = 0
+let g:ale_completion_enabled = 0
+let g:ale_use_global_executables = 1
+
+highlight link ALEError SpellCap
+" }}}
+" {{{ YouCompleteMe
+let g:ycm_python_binary_path = 'python'
+let g:ycm_autoclose_preview_window_after_completion = 0
+let g:ycm_filetype_whitelist = { 'python': 1, 'javascript': 1, 'typescript': 1}
+" }}}
+" {{{ COC
+" }}}
+" {{{ vim-pandoc
+let pandoc#modules#disabled = ['command', 'menu'] " list of unwanted modules
+let pandoc#syntax#conceal#use = 0 " 'conceal' means 'show results instead of formatting', which makes working with text harder
+let pandoc#folding#fdc = 0	" by default, first column is lost for fold information
+let pandoc#folding#fold_fenced_codeblocks = 1	" fold code blocks
+let pandoc#spell#enabled = 0 " spellchecking is distracting while writing
+let pandoc#spell#default_langs = ["pl"]	" spellcheck languages
+let pandoc#hypertext#open_editable_alternates = 0 " when opening file.html, vim-pandoc would try file.md instead, if it exists
+" }}}
+" {{{ vim-latex
+set grepprg=grep\ -nH\ $*
+let g:tex_flavor='latex'
+let g:Imap_UsePlaceHolders = 0
+" }}}
+" {{{ colors
+set background=dark
+
+" menu
+" selected item
+" scrollbar
+" scrollbar thumb
+hi Pmenu ctermfg=251 ctermbg=235
+hi PmenuSel ctermfg=254 ctermbg=241 cterm=bold
+hi PmenuSbar ctermfg=16  ctermbg=236
+hi PmenuThumb ctermfg=232 ctermbg=151
+hi WildMenu ctermfg=0 ctermbg=3 term=standout
+hi Folded ctermbg=0 ctermfg=14
+" }}}
+" {{{ custom keybindings
+" Shortcuts from irssi
+nnoremap <C-p> :bp!<CR>
+nnoremap <C-n> :bn!<CR>
+imap <C-@> <C-Space>
+let mapleader = "," " use comma as <leader>
+let maplocalleader = ","
+
+noremap <F1> :wincmd w<CR>
+noremap <F2> :NERDTreeToggle<CR>
+noremap <F4> :TagbarToggle<CR>
+noremap <F5> :UndotreeToggle<CR>
+
+" fzf
+nnoremap ; :Buffers<CR>
+nnoremap <C-f> :Files .<CR>
+
+"{{{ CoC
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+	execute 'h '.expand('<cword>')
+  else
+	call CocAction('doHover')
+  endif
+endfunction
+
+" completion using tab and ctrl+space
+inoremap <silent><expr> <TAB>
+	  \ pumvisible() ? "\<C-n>" :
+	  \ <SID>check_back_space() ? "\<TAB>" :
+	  \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <silent><expr> <C-space> coc#refresh()
+
+" Use `[g` and `]g` to navigate diagnostics
+"nmap <silent> [g <Plug>(coc-diagnostic-prev)
+"nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> <C-g> <Plug>(coc-definition)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Symbol renaming.
+nmap <leader>r <Plug>(coc-rename)
+"}}}
+
+" YouCompleteMe
+"noremap <C-b> :YcmCompleter GoToDefinition<CR>
+"inoremap <C-b> <esc>:YcmCompleter GoToDefinition<CR>i
+
+" emmet
+let g:user_emmet_leader_key = '<C-x>'
+
+" }}}
+" {{{ final custom configuration
+syntax on
+set viminfo='20,\"500   " Keep a .viminfo file.
+set history=50          " keep 50 lines of command history
+set viewoptions=folds,cursor
+set completeopt=menu,menuone,preview,noselect,noinsert
+set foldmethod=indent
+set shortmess+=c
+set numberwidth=3
+set ignorecase
+set smartcase
+set wildmenu
+set wildignore+=.*.sw*,__pycache__,*.pyc
+" When doing tab completion, give the following files lower priority.
+set suffixes+=.info,.aux,.log,.dvi,.bbl,.out,.o,.lo
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=0
+set shiftround
+set laststatus=2
+set mouse=nc
+set vb t_vb="."
+set hidden	            " don't unload buffer when switching it
+set bs=2                " Allow backspacing over everything in insert mode
+set ai                  " Always set auto-indenting on
+set ruler               " Show the cursor position all the time
+
+" conditional settings
+if &term ==? "xterm"
+  set t_Sb=^[4%dm
+  set t_Sf=^[3%dm
+  set ttymouse=xterm2
+endif
+
+" let .sh default to bash
+if has("eval")
+  let is_bash=1
+endif
+" }}}
+" vim: fdm=marker

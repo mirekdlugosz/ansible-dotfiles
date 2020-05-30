@@ -11,3 +11,7 @@ shell_additional_paths:
   - "{{ path_npm_global }}"
 
 lua_binary: lua
+
+vim_install_plugins: yes
+vim_coc_extensions: "coc-css coc-html coc-json coc-phpls coc-python coc-r-lsp coc-snippets coc-tsserver coc-yaml"
+vim_coc_extensions_dir: "{{ path_local_config }}/coc/extensions"

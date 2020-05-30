@@ -1,0 +1,23 @@
+- name: Ensuring vim autoload directory exists
+  file:
+    path: "{{ vim_dir }}/autoload"
+    state: directory
+
+- name: Preparing directory for vim-plug git
+  tempfile:
+    state: directory
+    suffix: vimplug
+  register: vimplug_git_dir
+
+- name: Cloning vimplug
+  git:
+    repo: "{{ vimplug_git_repo }}"
+    dest: "{{ vimplug_git_dir.path }}"
+
+- name: Installing vimplug
+  command: "cp {{ vimplug_git_dir.path }}/plug.vim {{ vim_dir }}/autoload/plug.vim"
+
+- name: Clean up git directory
+  file:
+    path: "{{ vimplug_git_dir.path }}"
+    state: absent

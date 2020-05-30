@@ -1,0 +1,24 @@
+- name: Create CoC extensions directory
+  file:
+    path: "{{ vim_coc_extensions_dir }}"
+    state: directory
+    mode: 0755
+
+- name: Checking package.json file
+  stat:
+    path: "{{ vim_coc_extensions_dir }}/package.json"
+  register: coc_package_json
+
+- name: Create empty package.json
+  copy:
+    dest: "{{ vim_coc_extensions_dir }}/package.json"
+    content: |
+      {"dependencies":{}}
+  when: not coc_package_json.stat.exists
+
+- name: Install CoC extensions
+  command:
+    chdir: "{{ vim_coc_extensions_dir }}"
+    cmd: |
+      npm install {{ vim_coc_extensions }} {{ vim_coc_extensions_npm_args }}
+  when: vim_install_plugins and vim_coc_extensions is defined

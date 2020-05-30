@@ -1,0 +1,13 @@
+- name: Prepare directories
+  file:
+    path: "{{ vim_dir }}/{{ item.path }}"
+    state: directory
+  with_filetree: .
+  when: item.state == 'directory'
+
+- name: Copy modular configuration files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ vim_dir }}/{{ item.path }}"
+  with_filetree: .
+  when: item.state == 'file'
