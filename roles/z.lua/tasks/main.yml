@@ -1,12 +1,20 @@
+- set_fact:
+    zlua_perform_install: True
+  when:
+    - zlua_perform_install is undefined
+
 - name: Preparing z.lua directory
   file:
     path: "{{ zlua_local_path }}"
     state: directory
+  when: zlua_perform_install is defined and zlua_perform_install
 
 - name: Cloning z.lua
   git:
     repo: "{{ zlua_git_repo }}"
     dest: "{{ zlua_local_path }}"
+  when: zlua_perform_install is defined and zlua_perform_install
 
 - name: Copying shell file
   template: src=zlua.bash dest="{{ path_shell_config }}/zlua.bash"
+  when: zlua_perform_install is defined and zlua_perform_install

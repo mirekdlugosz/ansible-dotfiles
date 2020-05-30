@@ -1,4 +1,17 @@
+ack_perform_install: no
+shell_extra_vars:
+  LANG: "pl_PL.UTF-8"
+  LC_ALL: "pl_PL.UTF-8"
+  BROWSER: "/usr/bin/firefox"
+  GTK_IM_MODULE: "xim"
+  GTK_USE_PORTAL: 1
+  TEXMFHOME: "$HOME/.texmf"
+  DEBEMAIL: "miroslaw-zalewski@o2.pl"
+  DEBFULLNAME: "Mirosław Zalewski"
+
 shell_additional_paths:
   - "{{ ansible_env.HOME }}/skrypty"
   - "{{ path_local_bin }}"
   - "{{ path_npm_global }}"
+
+vim_coc_extensions: "coc-css coc-html coc-json coc-phpls coc-python coc-r-lsp coc-snippets coc-tsserver coc-yaml"

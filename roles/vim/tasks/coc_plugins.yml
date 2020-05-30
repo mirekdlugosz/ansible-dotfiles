@@ -21,4 +21,3 @@
     chdir: "{{ vim_coc_extensions_dir }}"
     cmd: |
       npm install {{ vim_coc_extensions }} {{ vim_coc_extensions_npm_args }}
-  when: vim_install_plugins and vim_coc_extensions is defined

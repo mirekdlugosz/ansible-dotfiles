@@ -1,3 +1,0 @@
-for dir in {{ shell_additional_paths | join(" ") }} ; do
-
-for dir in {%for dir in shell_additional_paths%}"{{dir}}" {%endfor%}; do

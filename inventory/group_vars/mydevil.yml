@@ -1,3 +1,13 @@
+ack_perform_install: no
+bat_perform_install: no
+fd_perform_install: no
+starship_perform_install: no
+lua_binary: lua53
+
+shell_extra_vars:
+  LANG: "pl_PL.UTF-8"
+  LC_ALL: "pl_PL.UTF-8"
+
 shell_additional_paths:
   - "{{ ansible_env.HOME }}/go/bin"
   - "{{ path_local_bin }}"

@@ -54,7 +54,7 @@ vimplug_git_repo: "https://github.com/junegunn/vim-plug.git"
 vim_coc_extensions_npm_args: "--global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod"
 vim_coc_extensions_dir: "{{ path_local_config }}/coc/extensions"
 vim_install_plugins: yes
-vim_coc_extensions: "coc-css coc-html coc-json coc-phpls coc-python coc-r-lsp coc-snippets coc-tsserver coc-yaml"
+vim_coc_extensions: ""
 # }}}
 # {{{ z.lua
 zlua_local_path: "{{ ansible_env.HOME }}/.local/lib/z.lua"

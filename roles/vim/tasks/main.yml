@@ -7,3 +7,4 @@
   when: vim_install_plugins is defined and vim_install_plugins
 
 - import_tasks: coc_plugins.yml
+  when: vim_coc_extensions != ""

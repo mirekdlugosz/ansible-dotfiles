@@ -11,15 +11,10 @@ export BAT_STYLE="plain"
 export _ZL_ADD_ONCE="1"
 
 # OS-specific
-{% if ansible_os_family == 'Debian' %}
-export LANG="pl_PL.UTF-8"
-export LC_ALL="pl_PL.UTF-8"
-export BROWSER="/usr/bin/firefox"
-export GTK_IM_MODULE="xim"
-export GTK_USE_PORTAL=1
-export TEXMFHOME=$HOME/.texmf
-export DEBEMAIL="miroslaw-zalewski@o2.pl"
-export DEBFULLNAME="Mirosław Zalewski"
+{% if shell_extra_vars is defined %}
+{% for key, value in shell_extra_vars.items() %}
+export {{ key }}="{{ value }}"
+{% endfor %}
 {% endif %}
 
 # PATH setup

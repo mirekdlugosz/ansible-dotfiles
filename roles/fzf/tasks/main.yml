@@ -2,50 +2,51 @@
   command: fzf --version
   register: cmd_fzf_installed
   ignore_errors: True
+  when: fzf_perform_install is undefined
 
 - name: Checking fzf version
   shell: "fzf --version | awk 'NR==1 {print $1}'"
   register: cmd_fzf_version
-  when: cmd_fzf_installed.rc == 0
+  when:
+    - fzf_perform_install is undefined
+    - cmd_fzf_installed.rc == 0
 
 - set_fact:
-    fzf_installation_required: True
-  when: cmd_fzf_installed.rc != 0 or cmd_fzf_version.stdout != fzf_version
-
-- set_fact:
-    fzf_installation_required: False
-  when: fzf_installation_required is undefined
+    fzf_perform_install: True
+  when:
+    - fzf_perform_install is undefined
+    - cmd_fzf_installed.rc != 0 or cmd_fzf_version.stdout != fzf_version
 
 - name: Preparing tmp directory
   tempfile:
     state: directory
     suffix: fzf
   register: fzf_tmp_dir
-  when: fzf_installation_required
+  when: fzf_perform_install is defined and fzf_perform_install
 
 - name: Cloning fzf git repository
   git:
     repo: "{{ fzf_git_repo }}"
     dest: "{{ fzf_tmp_dir.path }}"
     version: "{{ fzf_version }}"
-  when: fzf_installation_required
+  when: fzf_perform_install is defined and fzf_perform_install
 
 - name: Copying bash key binding file
   command: "cp {{ fzf_tmp_dir.path }}/shell/key-bindings.bash {{ path_shell_config }}/fzf-keys.bash"
-  when: fzf_installation_required
+  when: fzf_perform_install is defined and fzf_perform_install
 
 - name: Downloading fzf archive
   get_url:
     url: "{{ fzf_archive_url }}"
     dest: "{{ fzf_tmp_dir.path }}/{{ fzf_archive }}"
-  when: fzf_installation_required
+  when: fzf_perform_install is defined and fzf_perform_install
 
 - name: Extracting fzf archive
   unarchive:
     src: "{{ fzf_tmp_dir.path }}/{{ fzf_archive }}"
     dest: "{{ fzf_tmp_dir.path }}"
     remote_src: yes
-  when: fzf_installation_required
+  when: fzf_perform_install is defined and fzf_perform_install
 
 - name: Find extracted fzf executable
   find:
@@ -54,21 +55,21 @@
     recurse: yes
     use_regex: yes
   register: fzf_find_results
-  when: fzf_installation_required
+  when: fzf_perform_install is defined and fzf_perform_install
 
 - name: Installing fzf
   command: "cp {{ item.path }} {{ path_local_bin }}/fzf"
   with_items: "{{ fzf_find_results.files }}"
-  when: fzf_installation_required
+  when: fzf_perform_install is defined and fzf_perform_install
 
 - name: Ensuring correct executable permissions
   file:
     path: "{{ path_local_bin }}/fzf"
     mode: "0775"
-  when: fzf_installation_required
+  when: fzf_perform_install is defined and fzf_perform_install
 
 - name: Clean up build directory
   file:
     path: "{{ fzf_tmp_dir.path }}"
     state: absent
-  when: fzf_installation_required
+  when: fzf_perform_install is defined and fzf_perform_install
