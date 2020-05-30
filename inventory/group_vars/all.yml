@@ -9,3 +9,5 @@ git_email: mirek@mirekdlugosz.com
 shell_additional_paths:
   - "{{ path_local_bin }}"
   - "{{ path_npm_global }}"
+
+lua_binary: lua

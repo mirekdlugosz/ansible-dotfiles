@@ -1,0 +1,70 @@
+add_newline = false
+
+[username]
+show_always = true
+style_user = "bold green"
+suffix = ""
+
+[hostname]
+ssh_only = false
+prefix = "@"
+trim_at = ""
+style = "bold green"
+
+[directory]
+truncate_to_repo = false
+prefix = ""
+style = "bold blue"
+
+[git_branch]
+symbol = ""
+
+[git_commit]
+style = "bold purple"
+
+[git_status]
+style = "white"
+conflicted.value = "✖ "
+conflicted.style = "bold red"
+conflicted_count.enabled = true
+conflicted_count.style = "bold red"
+untracked.value = "…"
+untracked.style = "bold cyan"
+untracked_count.enabled = true
+untracked_count.style = "bold cyan"
+stashed.value = "⚑ "
+stashed.style = "bold purple"
+stashed_count.enabled = true
+stashed_count.style = "bold purple"
+modified.value = "✚ "
+modified.style = "bold cyan"
+modified_count.enabled = true
+modified_count.style = "bold cyan"
+staged.value = "● "
+staged.style = "bold cyan"
+staged_count.enabled = true
+staged_count.style = "bold cyan"
+deleted_count.enabled = true
+show_sync_count = true
+#	GIT_PROMPT_SYMBOLS_NO_REMOTE_TRACKING="⇎"   # This symbol is written after the branch, if the branch is not tracked
+#	GIT_PROMPT_CLEAN="${BoldGreen}✔"      # a colored flag indicating a "clean" repo
+
+[nodejs]
+style = "bold cyan"
+
+[cmd_duration]
+min_time = "10"
+prefix = "🕒"
+
+[jobs]
+disabled = true
+
+[time]
+disabled = false
+style = "bold white"
+format = "%H:%M"
+
+[character]
+error_symbol = "✖ "
+use_symbol_for_status = true
+

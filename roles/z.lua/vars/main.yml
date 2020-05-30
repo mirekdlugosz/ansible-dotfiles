@@ -1,0 +1,2 @@
+zlua_local_path: "{{ ansible_env.HOME }}/.local/lib/z.lua"
+zlua_git_repo: "https://github.com/skywind3000/z.lua"

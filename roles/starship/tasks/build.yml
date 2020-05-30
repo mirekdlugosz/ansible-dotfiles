@@ -1,0 +1,63 @@
+- name: Checking if starship is available
+  command: starship --version
+  register: cmd_starship_installed
+  ignore_errors: True
+
+- name: Checking starship version
+  shell: "starship --version | awk 'NR==1 {print $2}'"
+  register: cmd_starship_version
+  when: cmd_starship_installed.rc == 0
+
+- set_fact:
+    starship_installation_required: True
+  when: cmd_starship_installed.rc != 0 or cmd_starship_version.stdout != starship_version
+
+- set_fact:
+    starship_installation_required: False
+  when: starship_installation_required is undefined
+
+- name: Preparing tmp directory
+  tempfile:
+    state: directory
+    suffix: starship
+  register: starship_tmp_dir
+  when: starship_installation_required
+
+- name: Downloading starship archive
+  get_url:
+    url: "{{ starship_archive_url }}"
+    dest: "{{ starship_tmp_dir.path }}/{{ starship_archive }}"
+  when: starship_installation_required
+
+- name: Extracting starship archive
+  unarchive:
+    src: "{{ starship_tmp_dir.path }}/{{ starship_archive }}"
+    dest: "{{ starship_tmp_dir.path }}"
+    remote_src: yes
+  when: starship_installation_required
+
+- name: Find extracted starship executable
+  find:
+    paths: "{{ starship_tmp_dir.path }}"
+    patterns: "^starship$"
+    recurse: yes
+    use_regex: yes
+  register: starship_find_results
+  when: starship_installation_required
+
+- name: Installing starship
+  command: "cp {{ item.path }} {{ path_local_bin }}/starship"
+  with_items: "{{ starship_find_results.files }}"
+  when: starship_installation_required
+
+- name: Ensuring correct executable permissions
+  file:
+    path: "{{ path_local_bin }}/starship"
+    mode: "0775"
+  when: starship_installation_required
+
+- name: Clean up build directory
+  file:
+    path: "{{ starship_tmp_dir.path }}"
+    state: absent
+  when: starship_installation_required
