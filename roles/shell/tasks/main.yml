@@ -1,0 +1,11 @@
+- name: Copy bashrc
+  copy: src=_bashrc dest=~/.bashrc
+
+- name: Copy profile
+  template: src=_bash_profile dest=~/.bash_profile
+
+- name: Copy modular configuration files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ path_shell_config }}/{{ item.path }}"
+  with_filetree: shell/

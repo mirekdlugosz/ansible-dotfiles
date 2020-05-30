@@ -1,0 +1,31 @@
+export HISTCONTROL="$HISTCONTROL${HISTCONTROL+:}erasedups:ignorespace"
+export HISTSIZE=20000
+export HISTFILESIZE=$HISTSIZE
+# https://www.reddit.com/r/linux/comments/46ubi8/ls_output_changes_considered_unacceptable/
+export QUOTING_STYLE=literal
+
+# Non-standard common tooling
+export FZF_DEFAULT_COMMAND='fd --type f'
+export BAT_THEME="Monokai Extended"
+export BAT_STYLE="plain"
+export _ZL_ADD_ONCE="1"
+
+# OS-specific
+{% if ansible_os_family == 'Debian' %}
+export LANG="pl_PL.UTF-8"
+export LC_ALL="pl_PL.UTF-8"
+export BROWSER="/usr/bin/firefox"
+export GTK_IM_MODULE="xim"
+export GTK_USE_PORTAL=1
+export TEXMFHOME=$HOME/.texmf
+export DEBEMAIL="miroslaw-zalewski@o2.pl"
+export DEBFULLNAME="Mirosław Zalewski"
+{% endif %}
+
+# PATH setup
+for dir in {% for dir in shell_additional_paths %}"{{ dir }}" {% endfor %}; do
+	if ! echo $PATH |grep -q -F "$dir"; then
+		PATH="${dir}:$PATH"
+	fi
+done
+export PATH

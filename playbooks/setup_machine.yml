@@ -1,39 +1,29 @@
 - name: Set up development environment
   hosts: all
   roles:
+    - role: group_hosts
+      tags: ["always"]
     - role: shell
-      tags:
-        - shell
+      tags: ["shell"]
     - role: ack
-      tags:
-        - ack
+      tags: ["ack"]
     - role: bat
-      tags:
-        - bat
+      tags: ["bat"]
     - role: direnv
-      tags:
-        - direnv
+      tags: ["direnv"]
     - role: fd
-      tags:
-        - fd
+      tags: ["fd"]
     - role: fzf
-      tags:
-        - fzf
+      tags: ["fzf"]
     - role: git
-      tags:
-        - git
+      tags: ["git"]
     - role: npm
-      tags:
-        - npm
+      tags: ["npm"]
     - role: R
-      tags:
-        - R
+      tags: ["R"]
     - role: starship
-      tags:
-        - starship
+      tags: ["starship"]
     - role: vim
-      tags:
-        - vim
+      tags: ["vim"]
     - role: z.lua
-      tags:
-        - z.lua
+      tags: ["z.lua"]

@@ -1,0 +1,4 @@
+fd_version: "8.1.1"
+fd_vversion: "v{{ fd_version }}"
+fd_archive: "fd-{{ fd_vversion }}-x86_64-unknown-linux-gnu.tar.gz"
+fd_archive_url: "https://github.com/sharkdp/fd/releases/download/{{ fd_vversion }}/{{ fd_archive }}"

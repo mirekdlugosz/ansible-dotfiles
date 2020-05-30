@@ -1,0 +1,7 @@
+- name: Copy config files
+  template:
+    src: "{{ item }}"
+    dest: "~/{{ item | replace('_', '.', 1) }}"
+  loop:
+    - _gitconfig
+    - _gitignore_global

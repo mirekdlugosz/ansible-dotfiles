@@ -1,0 +1,11 @@
+path_local_config: "{{ ansible_env.HOME }}/.config/"
+path_local_bin: "{{ ansible_env.HOME }}/.local/bin/"
+path_shell_config: "{{ path_local_config }}/shell/"
+
+path_npm_global: "{{ ansible_env.HOME }}/.npm-global"
+
+git_email: mirek@mirekdlugosz.com
+
+shell_additional_paths:
+  - "{{ path_local_bin }}"
+  - "{{ path_npm_global }}"

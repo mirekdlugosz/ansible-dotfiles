@@ -1,0 +1,63 @@
+- name: Checking if fd is available
+  command: fd --version
+  register: cmd_fd_installed
+  ignore_errors: True
+
+- name: Checking fd version
+  shell: "fd --version | awk 'NR==1 {print $2}'"
+  register: cmd_fd_version
+  when: cmd_fd_installed.rc == 0
+
+- set_fact:
+    fd_installation_required: True
+  when: cmd_fd_installed.rc != 0 or cmd_fd_version.stdout != fd_version
+
+- set_fact:
+    fd_installation_required: False
+  when: fd_installation_required is undefined
+
+- name: Preparing tmp directory
+  tempfile:
+    state: directory
+    suffix: fd
+  register: fd_tmp_dir
+  when: fd_installation_required
+
+- name: Downloading fd archive
+  get_url:
+    url: "{{ fd_archive_url }}"
+    dest: "{{ fd_tmp_dir.path }}/{{ fd_archive }}"
+  when: fd_installation_required
+
+- name: Extracting fd archive
+  unarchive:
+    src: "{{ fd_tmp_dir.path }}/{{ fd_archive }}"
+    dest: "{{ fd_tmp_dir.path }}"
+    remote_src: yes
+  when: fd_installation_required
+
+- name: Find extracted fd executable
+  find:
+    paths: "{{ fd_tmp_dir.path }}"
+    patterns: "^fd$"
+    recurse: yes
+    use_regex: yes
+  register: fd_find_results
+  when: fd_installation_required
+
+- name: Installing fd
+  command: "cp {{ item.path }} {{ path_local_bin }}/fd"
+  with_items: "{{ fd_find_results.files }}"
+  when: fd_installation_required
+
+- name: Ensuring correct executable permissions
+  file:
+    path: "{{ path_local_bin }}/fd"
+    mode: "0775"
+  when: fd_installation_required
+
+- name: Clean up build directory
+  file:
+    path: "{{ fd_tmp_dir.path }}"
+    state: absent
+  when: fd_installation_required

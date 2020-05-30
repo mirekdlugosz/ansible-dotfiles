@@ -1,0 +1,7 @@
+__pycache__
+.idea
+*.swp
+*.pyc
+.Rproj.user/
+*.Rproj
+.envrc

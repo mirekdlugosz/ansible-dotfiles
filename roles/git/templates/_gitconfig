@@ -1,0 +1,25 @@
+[user]
+	name = Mirek Długosz
+	email = {{ git_email }}
+[credential]
+	helper = cache --timeout=3600
+[push]
+	default = simple
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+[core]
+	excludesfile = {{ ansible_env.HOME }}/.gitignore_global
+	whitespace = cr-at-eol
+[diff]
+	noprefix = true
