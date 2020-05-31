@@ -5,4 +5,3 @@ alias mplayer=mpv
 alias ls='ls --color=auto --hide="__pycache__" --hide="*.pyc"'
 alias grep='grep --colour=auto -I'
 [ "$TERM" = 'rxvt-256color' ] && alias vim='TERM=xterm vim'
-

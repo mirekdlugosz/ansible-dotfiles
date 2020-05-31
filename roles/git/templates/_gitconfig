@@ -21,5 +21,7 @@
 [core]
 	excludesfile = {{ ansible_env.HOME }}/.gitignore_global
 	whitespace = cr-at-eol
+[apply]
+    whitespace = strip
 [diff]
 	noprefix = true

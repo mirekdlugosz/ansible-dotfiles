@@ -1,2 +1,11 @@
 git_email: mzalewsk@redhat.com
 vim_coc_extensions: "coc-json coc-python coc-snippets coc-yaml"
+
+shell_extra_vars:
+  BROWSER: "/usr/bin/google-chrome"
+  VAGRANT_DEFAULT_PROVIDER: "libvirt"
+
+shell_additional_paths:
+  - "{{ path_local_bin }}"
+  - "{{ path_npm_global }}"
+  - "{{ ansible_env.HOME }}/.pyenv/bin"
