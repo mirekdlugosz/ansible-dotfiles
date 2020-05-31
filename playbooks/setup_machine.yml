@@ -1,5 +1,7 @@
 - name: Set up development environment
   hosts: all
+  environment:
+    PATH: "{{ path_local_bin }}:{{ ansible_env.PATH }}"
   roles:
     - role: group_hosts
       tags: ["always"]
