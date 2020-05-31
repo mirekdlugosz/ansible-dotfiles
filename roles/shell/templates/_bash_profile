@@ -24,3 +24,11 @@ for dir in {% for dir in shell_additional_paths %}"{{ dir }}" {% endfor %}; do
 	fi
 done
 export PATH
+
+# read bashrc on login shell to ensure common experience
+# but since we read ~/.bash_profile from ~/.bashrc,
+# set variable to avoid infinite loop
+if shopt -q login_shell && [ -z "$__READ_BASHRC" ]; then
+    export __READ_BASHRC=1
+    . ~/.bashrc
+fi

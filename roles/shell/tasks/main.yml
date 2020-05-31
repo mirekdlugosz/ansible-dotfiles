@@ -15,3 +15,13 @@
     src: "{{ item.src }}"
     dest: "{{ path_shell_config }}/{{ item.path }}"
   with_filetree: shell/
+  when: not "{{ item.path }}" is match('os_specific')
+
+- name: Copy host-specific modular configuration files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ path_shell_config }}/{{ item.path }}"
+  with_filetree: shell/os_specific/
+  when:
+    - shell_additional_configs is defined
+    - "shell_additional_configs is contains(item.path | basename)"
