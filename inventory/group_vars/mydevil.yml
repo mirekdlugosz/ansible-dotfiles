@@ -5,8 +5,11 @@ starship_perform_install: no
 lua_binary: lua53
 
 shell_extra_vars:
+  EDITOR: "vim"
   LANG: "pl_PL.UTF-8"
   LC_ALL: "pl_PL.UTF-8"
+  CLICOLOR: "YES"
+  GOPATH: "$HOME/go"
 
 shell_additional_paths:
   - "{{ ansible_env.HOME }}/go/bin"
