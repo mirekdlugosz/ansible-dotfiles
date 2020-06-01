@@ -17,23 +17,28 @@
     - fzf_perform_install is undefined
     - cmd_fzf_installed.rc != 0 or cmd_fzf_version.stdout != fzf_version
 
+- name: Checking if fzf-keys.bash exists
+  stat:
+    path: "{{ path_shell_config }}/fzf-keys.bash"
+  register: fzf_keys_bash_file
+
 - name: Preparing tmp directory
   tempfile:
     state: directory
     suffix: fzf
   register: fzf_tmp_dir
-  when: fzf_perform_install is defined and fzf_perform_install
+  when: fzf_perform_install is defined and fzf_perform_install or not fzf_keys_bash_file.stat.exists
 
 - name: Cloning fzf git repository
   git:
     repo: "{{ fzf_git_repo }}"
     dest: "{{ fzf_tmp_dir.path }}"
     version: "{{ fzf_version }}"
-  when: fzf_perform_install is defined and fzf_perform_install
+  when: fzf_perform_install is defined and fzf_perform_install or not fzf_keys_bash_file.stat.exists
 
 - name: Copying bash key binding file
   command: "cp {{ fzf_tmp_dir.path }}/shell/key-bindings.bash {{ path_shell_config }}/fzf-keys.bash"
-  when: fzf_perform_install is defined and fzf_perform_install
+  when: fzf_perform_install is defined and fzf_perform_install or not fzf_keys_bash_file.stat.exists
 
 - name: Downloading fzf archive
   get_url:
@@ -72,4 +77,4 @@
   file:
     path: "{{ fzf_tmp_dir.path }}"
     state: absent
-  when: fzf_perform_install is defined and fzf_perform_install
+  when: fzf_perform_install is defined and fzf_perform_install or not fzf_keys_bash_file.stat.exists
