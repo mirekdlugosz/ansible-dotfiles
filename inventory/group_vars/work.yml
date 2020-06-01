@@ -1,4 +1,3 @@
-fzf_perform_install: no
 git_email: mzalewsk@redhat.com
 vim_coc_extensions: "coc-json coc-python coc-snippets coc-yaml"
 
