@@ -18,6 +18,11 @@
     - "~/.bash_profile"
     - "~/.profile"
 
+- name: Ensure clean state of modular configuration directory
+  file:
+    path: "{{ path_shell_config }}"
+    state: "absent"
+
 - name: Create directory for modular configuration
   file:
     path: "{{ path_shell_config }}"

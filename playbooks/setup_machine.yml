@@ -6,7 +6,7 @@
     - role: group_hosts
       tags: ["always"]
     - role: shell
-      tags: ["shell"]
+      tags: ["shell", "shell_config"]
     - role: ack
       tags: ["ack"]
     - role: bat
@@ -16,7 +16,7 @@
     - role: fd
       tags: ["fd"]
     - role: fzf
-      tags: ["fzf"]
+      tags: ["fzf", "shell_config"]
     - role: git
       tags: ["git"]
     - role: npm
@@ -28,4 +28,4 @@
     - role: vim
       tags: ["vim"]
     - role: z.lua
-      tags: ["z.lua"]
+      tags: ["z.lua", "shell_config"]

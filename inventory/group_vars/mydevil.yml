@@ -15,3 +15,6 @@ shell_extra_paths:
   - "{{ ansible_env.HOME }}/go/bin"
   - "{{ path_local_bin }}"
   - "{{ path_npm_global }}"
+
+shell_extra_configs:
+  - "bsd_alias.bash"
