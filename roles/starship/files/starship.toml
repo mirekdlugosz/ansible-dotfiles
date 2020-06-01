@@ -49,12 +49,15 @@ show_sync_count = true
 #	GIT_PROMPT_SYMBOLS_NO_REMOTE_TRACKING="⇎"   # This symbol is written after the branch, if the branch is not tracked
 #	GIT_PROMPT_CLEAN="${BoldGreen}✔"      # a colored flag indicating a "clean" repo
 
+[aws]
+disabled = true
+
 [nodejs]
 style = "bold cyan"
 
 [cmd_duration]
 min_time = "10"
-prefix = "🕒"
+prefix = "🕒 "
 
 [jobs]
 disabled = true

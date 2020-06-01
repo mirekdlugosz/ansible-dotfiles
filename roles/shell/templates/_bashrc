@@ -1,3 +1,10 @@
+# /etc/skel/.bashrc
+#
+# This file is sourced by all *interactive* bash shells on startup,
+# including some apparently interactive shells such as scp and rcp
+# that can't tolerate any output.  So make sure this doesn't display
+# anything or bad things will happen !
+
 export HISTCONTROL="$HISTCONTROL${HISTCONTROL+:}erasedups:ignorespace"
 export HISTSIZE=20000
 export HISTFILESIZE=$HISTSIZE
@@ -25,10 +32,19 @@ for dir in {% for dir in shell_additional_paths %}"{{ dir }}" {% endfor %}; do
 done
 export PATH
 
-# read bashrc on login shell to ensure common experience
-# but since we read ~/.bash_profile from ~/.bashrc,
-# set variable to avoid infinite loop
-if shopt -q login_shell && [ -z "$__READ_BASHRC" ]; then
-    export __READ_BASHRC=1
-    . ~/.bashrc
+# Test for an interactive shell.
+if [[ $- != *i* ]] ; then
+	# Shell is non-interactive.  Be done now!
+	return
+fi
+
+if [ ! -z "$BASH" ]; then
+    if [ -d "$HOME/.config/shell/" ]; then
+        for i in "$HOME"/.config/shell/*.bash; do
+            if [ -r "$i" ]; then
+                . "$i"
+            fi
+        done
+        unset i
+    fi
 fi

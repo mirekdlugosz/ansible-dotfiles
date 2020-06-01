@@ -1,8 +1,22 @@
-- name: Copy bashrc
-  copy: src=_bashrc dest=~/.bashrc
+- name: Create bashrc
+  template: src=_bashrc dest=~/.bashrc
 
-- name: Copy profile
-  template: src=_bash_profile dest=~/.bash_profile
+- name: Remove old shell config files
+  file:
+    dest: "{{ item }}"
+    state: absent
+  loop:
+    - "~/.bash_profile"
+    - "~/.profile"
+
+- name: Create symlinks for other shell startup files
+  file:
+    src: "~/.bashrc"
+    dest: "{{ item }}"
+    state: link
+  loop:
+    - "~/.bash_profile"
+    - "~/.profile"
 
 - name: Create directory for modular configuration
   file:
@@ -15,7 +29,7 @@
     src: "{{ item.src }}"
     dest: "{{ path_shell_config }}/{{ item.path }}"
   with_filetree: shell/
-  when: not "{{ item.path }}" is match('os_specific')
+  when: not item.path is match('os_specific')
 
 - name: Copy host-specific modular configuration files
   copy:
