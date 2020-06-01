@@ -38,7 +38,7 @@ path_npm_global: "{{ ansible_env.HOME }}/.npm-global"
 r_local_lib: "{{ ansible_env.HOME }}/.local/lib/R"
 # }}}
 # {{{ shell
-shell_additional_paths:
+shell_extra_paths:
   - "{{ path_local_bin }}"
   - "{{ path_npm_global }}"
 # }}}

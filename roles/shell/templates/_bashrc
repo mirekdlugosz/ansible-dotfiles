@@ -25,7 +25,7 @@ export {{ key }}="{{ value }}"
 {% endif %}
 
 # PATH setup
-for dir in {% for dir in shell_additional_paths %}"{{ dir }}" {% endfor %}; do
+for dir in {% for dir in shell_extra_paths %}"{{ dir }}" {% endfor %}; do
 	if ! echo $PATH |grep -q -F "$dir"; then
 		PATH="${dir}:$PATH"
 	fi

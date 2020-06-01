@@ -1,3 +1,4 @@
+fzf_perform_install: no
 git_email: mzalewsk@redhat.com
 vim_coc_extensions: "coc-json coc-python coc-snippets coc-yaml"
 
@@ -6,11 +7,11 @@ shell_extra_vars:
   VAGRANT_DEFAULT_PROVIDER: "libvirt"
   EDITOR: "vimx"
 
-shell_additional_paths:
+shell_extra_paths:
   - "{{ path_local_bin }}"
   - "{{ path_npm_global }}"
   - "{{ ansible_env.HOME }}/.pyenv/bin"
 
-shell_additional_configs:
+shell_extra_configs:
   - "rh_alias.bash"
   - "00_source_etc_bashrc.bash"

@@ -37,5 +37,5 @@
     dest: "{{ path_shell_config }}/{{ item.path }}"
   with_filetree: shell/os_specific/
   when:
-    - shell_additional_configs is defined
-    - "shell_additional_configs is contains(item.path | basename)"
+    - shell_extra_configs is defined
+    - "shell_extra_configs is contains(item.path | basename)"
