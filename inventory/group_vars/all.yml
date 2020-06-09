@@ -40,7 +40,7 @@ r_local_lib: "{{ ansible_env.HOME }}/.local/lib/R"
 # {{{ shell
 shell_extra_paths:
   - "{{ path_local_bin }}"
-  - "{{ path_npm_global }}"
+  - "{{ path_npm_global }}/bin"
 # }}}
 # {{{ starship
 starship_version: "0.41.3"
