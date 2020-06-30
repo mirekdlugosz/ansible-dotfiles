@@ -5,7 +5,7 @@ path_shell_config: "{{ path_local_config }}/shell/"
 # {{{ custom roles defaults
 # {{{ ack
 ack_git_repo: "https://github.com/beyondgrep/ack3.git"
-ack_version: "v3.3.1"
+ack_version: "v3.4.0"
 # }}}
 # {{{ bat
 bat_version: "0.15.4"
