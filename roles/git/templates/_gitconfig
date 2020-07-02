@@ -10,8 +10,9 @@
     local = yellow
     remote = green
 [color "diff"]
-    meta = yellow bold
-    frag = magenta bold
+    meta = cyan
+    commit = yellow bold
+    frag = magenta
     old = red bold
     new = green bold
 [color "status"]
