@@ -3,6 +3,7 @@ bat_perform_install: no
 fd_perform_install: no
 starship_perform_install: no
 lua_binary: lua53
+path_target_node_binary: "/usr/local/bin/node12"
 
 shell_extra_vars:
   EDITOR: "vim"

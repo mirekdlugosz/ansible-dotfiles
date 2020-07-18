@@ -19,8 +19,8 @@
       tags: ["fzf", "shell_config"]
     - role: git
       tags: ["git"]
-    - role: npm
-      tags: ["npm"]
+    - role: nodejs
+      tags: ["nodejs"]
     - role: R
       tags: ["R"]
     - role: starship

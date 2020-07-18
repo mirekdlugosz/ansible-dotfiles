@@ -1,0 +1,9 @@
+- name: Create npm-global directory
+  file: path={{ path_npm_global }} state=directory mode=0755
+
+- name: Copy .npmrc file
+  template: src=_npmrc dest=~/.npmrc
+
+- name: Creating node symbolic link
+  file: path={{ path_local_bin }}/node src={{ path_target_node_binary }} state=link
+  when: path_target_node_binary is defined
