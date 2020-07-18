@@ -13,6 +13,9 @@ Plug 'tomtom/tlib_vim'
 " }}}
 
 " {{{ General editing
+" better color scheme
+Plug 'nanotech/jellybeans.vim'
+
 " Automatically surround by tags
 "Plugin 'tpope/vim-surround'
 " Useful keybindings
@@ -167,17 +170,18 @@ let g:Imap_UsePlaceHolders = 0
 " }}}
 " {{{ colors
 set background=dark
-
-" menu
-" selected item
-" scrollbar
-" scrollbar thumb
-hi Pmenu ctermfg=251 ctermbg=235
-hi PmenuSel ctermfg=254 ctermbg=241 cterm=bold
-hi PmenuSbar ctermfg=16  ctermbg=236
-hi PmenuThumb ctermfg=232 ctermbg=151
-hi WildMenu ctermfg=0 ctermbg=3 term=standout
-hi Folded ctermbg=0 ctermfg=14
+let g:jellybeans_overrides = {
+\    'background': { 'ctermbg': 'none', '256ctermbg': 'none' },
+\    'SpellCap': { '256ctermfg': '99', '256ctermbg': 'none', 'attr': 'underline' },
+\    'SignColumn': { '256ctermfg': '81', '256ctermbg': 'none' },
+\    'Todo': { 'attr': 'reverse' },
+\    'Pmenu': { '256ctermfg': '250', '256ctermbg': '237' },
+\    'PmenuSel': { '256ctermfg': '81', '256ctermbg': '237', 'attr': 'bold' },
+\    'PmenuSbar': { '256ctermfg': '16', '256ctermbg': '237', 'guifg': 'none', 'guibg': 'none' },
+\    'PmenuThumb': { '256ctermfg': '235', '256ctermbg': '243', 'guifg': 'none', 'guibg': 'none' },
+\    'Folded': { '256ctermbg': 'none'},
+\}
+colorscheme jellybeans
 " }}}
 " {{{ custom keybindings
 " Shortcuts from irssi
