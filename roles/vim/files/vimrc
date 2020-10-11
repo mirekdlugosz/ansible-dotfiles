@@ -134,6 +134,7 @@ let g:tagbar_autoshowtag = 1
 " }}}
 " {{{ FZF
 let g:fzf_preview_window = ''
+let g:fzf_layout = { 'down': '30%' }
 " }}}
 " {{{ ALE - asynchrounous linters
 let g:ale_set_loclist = 1
