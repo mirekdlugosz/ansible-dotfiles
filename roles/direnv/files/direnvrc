@@ -3,9 +3,9 @@ layout_python-venv() {
 	[[ $# -gt 0 ]] && shift
 	unset PYTHONHOME
 	if [[ -n $VIRTUAL_ENV ]]; then
-		VIRTUAL_ENV=$(readlink -f "${VIRTUAL_ENV}")
+		VIRTUAL_ENV="$(readlink -f "${VIRTUAL_ENV}")"
 	else
-		VIRTUAL_ENV=$HOME/.virtualenvs/$(basename $(readlink -f .))
+		VIRTUAL_ENV="$HOME/.virtualenvs/$(basename "$(readlink -f .)")"
 	fi
 	export VIRTUAL_ENV
 
