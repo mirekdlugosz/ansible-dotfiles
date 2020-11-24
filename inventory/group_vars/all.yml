@@ -8,7 +8,7 @@ ack_git_repo: "https://github.com/beyondgrep/ack3.git"
 ack_version: "v3.4.0"
 # }}}
 # {{{ bat
-bat_version: "0.17.0"
+bat_version: "0.17.1"
 bat_vversion: "v{{ bat_version }}"
 bat_archive: "bat-{{ bat_vversion }}-x86_64-unknown-linux-gnu.tar.gz"
 bat_archive_url: "https://github.com/sharkdp/bat/releases/download/{{ bat_vversion }}/{{ bat_archive }}"
