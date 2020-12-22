@@ -4,4 +4,4 @@ set expandtab
 set autoindent
 set fileformat=unix
 
-let b:ale_linters = ['pyls', 'flake8', 'pylint']
+let b:ale_linters = ['flake8', 'pylint']
