@@ -1,5 +1,6 @@
 scriptencoding utf-8
 set nocompatible " nobody cares about vi anymore
+syntax on " some sections want to set custom colors, but will fail without this
 
 "{{{ vim-plug plugin manager
 
@@ -145,8 +146,6 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_set_signs = 0
 let g:ale_completion_enabled = 0
 let g:ale_use_global_executables = 1
-
-highlight link ALEError SpellCap
 " }}}
 " {{{ YouCompleteMe
 let g:ycm_python_binary_path = 'python'
@@ -183,6 +182,8 @@ let g:jellybeans_overrides = {
 \    'Folded': { '256ctermbg': 'none'},
 \}
 colorscheme jellybeans
+
+highlight link ALEError SpellCap
 " }}}
 " {{{ custom keybindings
 " Shortcuts from irssi
@@ -246,7 +247,6 @@ let g:user_emmet_leader_key = '<C-x>'
 
 " }}}
 " {{{ final custom configuration
-syntax on
 set viminfo='20,\"500   " Keep a .viminfo file.
 set history=50          " keep 50 lines of command history
 set viewoptions=folds,cursor

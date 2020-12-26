@@ -1,5 +1,5 @@
 git_email: mzalewsk@redhat.com
-vim_coc_extensions: "coc-json coc-python coc-snippets coc-yaml"
+vim_coc_extensions: "coc-json coc-jedi coc-snippets coc-yaml"
 
 shell_extra_vars:
   BROWSER: "/usr/bin/google-chrome"

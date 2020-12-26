@@ -14,4 +14,4 @@ shell_extra_paths:
   - "{{ path_local_bin }}"
   - "{{ path_npm_global }}/bin"
 
-vim_coc_extensions: "coc-css coc-html coc-json coc-phpls coc-python coc-r-lsp coc-snippets coc-tsserver coc-yaml"
+vim_coc_extensions: "coc-css coc-html coc-json coc-phpls coc-jedi coc-r-lsp coc-snippets coc-tsserver coc-yaml"
