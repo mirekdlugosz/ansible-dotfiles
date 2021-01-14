@@ -137,6 +137,9 @@ let g:tagbar_autoshowtag = 1
 let g:fzf_preview_window = ''
 let g:fzf_layout = { 'down': '30%' }
 " }}}
+" {{{ SnipMate
+let g:snipMate = { 'snippet_version' : 1 }
+" }}}
 " {{{ ALE - asynchrounous linters
 let g:ale_set_loclist = 1
 let g:ale_keep_list_window_open = 0
