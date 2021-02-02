@@ -2,7 +2,7 @@ ack_perform_install: no
 bat_perform_install: no
 fd_perform_install: no
 lua_binary: lua53
-path_target_node_binary: "/usr/local/bin/node12"
+path_target_node_binary: "/usr/local/bin/node14"
 starship_archive: "starship-x86_64-unknown-freebsd.tar.gz"
 
 shell_extra_vars:
