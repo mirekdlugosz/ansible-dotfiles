@@ -1,5 +1,4 @@
 - import_tasks: build.yml
-  when: ansible_system == "Linux"
 
 - name: Copy starship.toml
   copy: src=starship.toml dest="{{ path_local_config }}/starship.toml"
