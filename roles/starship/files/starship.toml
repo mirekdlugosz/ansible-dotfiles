@@ -1,5 +1,12 @@
 add_newline = false
 
+[custom.is_ssh]
+description = "You seem connected through SSH"
+when = """ test -n "$SSH_CONNECTION" """
+command = "echo 📡"
+format = "[$output]($style) "
+style = "bold fg:blue"
+
 [username]
 show_always = true
 style_user = "bold green"
