@@ -3,7 +3,11 @@
 - import_tasks: git_vim_plug.yml
 
 - name: Installing vim plugins
-  command: "vim +PlugInstall +qall"
+  command: "vim {{item}} +qall"
+  loop:
+    - "+PlugInstall"
+    - "+PlugClean!"
+    - "+PlugUpdate"
   when: vim_install_plugins is defined and vim_install_plugins
 
 - import_tasks: coc_plugins.yml
