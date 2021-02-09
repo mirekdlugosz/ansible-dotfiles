@@ -13,6 +13,7 @@
   git:
     repo: "{{ vimplug_git_repo }}"
     dest: "{{ vimplug_git_dir.path }}"
+    depth: "1"
 
 - name: Installing vimplug
   command: "cp {{ vimplug_git_dir.path }}/plug.vim {{ vim_dir }}/autoload/plug.vim"

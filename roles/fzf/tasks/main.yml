@@ -34,6 +34,7 @@
     repo: "{{ fzf_git_repo }}"
     dest: "{{ fzf_tmp_dir.path }}"
     version: "{{ fzf_version }}"
+    depth: "1"
   when: fzf_perform_install is defined and fzf_perform_install or not fzf_keys_bash_file.stat.exists
 
 - name: Copying bash key binding file

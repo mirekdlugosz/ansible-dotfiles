@@ -37,6 +37,7 @@
     repo: "{{ ack_git_repo }}"
     dest: "{{ ack_build_dir.path }}"
     version: "{{ ack_version }}"
+    depth: "1"
   when: ack_perform_install is defined and ack_perform_install
 
 - name: Building ack
