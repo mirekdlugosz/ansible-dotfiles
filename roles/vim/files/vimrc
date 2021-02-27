@@ -47,6 +47,11 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 
+" distraction-free editing
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+
+
 " }}}
 
 " {{{ Programming
