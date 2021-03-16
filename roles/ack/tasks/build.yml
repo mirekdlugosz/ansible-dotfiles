@@ -21,6 +21,7 @@
   yum:
     name: perl-File-Next
     state: present
+  become: yes
   when:
     - ack_perform_install is defined and ack_perform_install
     - ansible_os_family == "RedHat"
