@@ -1,3 +1,4 @@
+ack_perform_install: no
 git_email: mzalewsk@redhat.com
 vim_coc_extensions: "coc-json coc-jedi coc-snippets coc-yaml"
 
