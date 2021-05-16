@@ -19,3 +19,4 @@ shell_extra_paths:
 
 shell_extra_configs:
   - "bsd_alias.bash"
+  - "git_completion.bash"
