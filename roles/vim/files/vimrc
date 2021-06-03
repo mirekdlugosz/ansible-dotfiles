@@ -121,6 +121,7 @@ if exists("+omnifunc")
 		\		setlocal omnifunc=syntaxcomplete#Complete |
 		\	endif
 endif
+autocmd! FileType fzf set laststatus=0 noruler | autocmd BufLeave <buffer> set laststatus=2 ruler
 " }}}
 endif " has("autocmd")
 " }}}

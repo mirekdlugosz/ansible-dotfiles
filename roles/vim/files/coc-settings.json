@@ -1,4 +1,5 @@
 {
     "diagnostic.displayByAle": true,
-    "jedi.startupMessage": false
+    "jedi.startupMessage": false,
+    "jedi.executable.command": "jedi-language-server"
 }
