@@ -281,6 +281,7 @@ set hidden	            " don't unload buffer when switching it
 set bs=2                " Allow backspacing over everything in insert mode
 set ai                  " Always set auto-indenting on
 set ruler               " Show the cursor position all the time
+set diffopt=filler,internal,algorithm:histogram,indent-heuristic
 
 " conditional settings
 if &term ==? "xterm"
