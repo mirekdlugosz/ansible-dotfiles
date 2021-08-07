@@ -19,6 +19,8 @@
       tags: ["fzf", "shell_config"]
     - role: git
       tags: ["git"]
+    - role: ipython
+      tags: ["ipython"]
     - role: nodejs
       tags: ["nodejs"]
     - role: R
