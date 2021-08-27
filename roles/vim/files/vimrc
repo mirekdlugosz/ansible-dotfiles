@@ -140,8 +140,17 @@ let g:tagbar_autofocus = 1
 let g:tagbar_autoshowtag = 1
 " }}}
 " {{{ FZF
-let g:fzf_preview_window = ''
+let g:fzf_preview_window = ['right:50%:hidden', 'ctrl-/']
 let g:fzf_layout = { 'down': '30%' }
+
+function! AckFzfWrapper(query, fullscreen)
+  let command_fmt = 'ack --nogroup --column --color -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+command! -nargs=* -bang FzfAck call AckFzfWrapper(<q-args>, <bang>0)
 " }}}
 " {{{ SnipMate
 let g:snipMate = { 'snippet_version' : 1 }
@@ -210,6 +219,7 @@ noremap <F5> :UndotreeToggle<CR>
 " fzf
 nnoremap ; :Buffers<CR>
 nnoremap <C-f> :Files .<CR>
+nnoremap <C-a> :FzfAck <CR>
 
 "{{{ CoC
 function! s:check_back_space() abort
