@@ -145,9 +145,10 @@ let g:fzf_layout = { 'down': '30%' }
 
 function! AckFzfWrapper(query, fullscreen)
   let command_fmt = 'ack --nogroup --column --color -- %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
+  let l:ackquery = empty(a:query) ? expand("<cword>") : a:query
+  let initial_command = printf(command_fmt, shellescape(l:ackquery))
   let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  let spec = {'options': ['--phony', '--query', l:ackquery, '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 command! -nargs=* -bang FzfAck call AckFzfWrapper(<q-args>, <bang>0)
