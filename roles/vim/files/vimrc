@@ -81,6 +81,8 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 " quick HTML and CSS
 Plug 'mattn/emmet-vim'
 
+" Vue.js
+Plug 'leafOfTree/vim-vue-plugin'
 " }}}
 
 " All of your Plugins must be added before the following line
