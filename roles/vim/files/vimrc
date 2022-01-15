@@ -270,7 +270,7 @@ let g:user_emmet_leader_key = '<C-x>'
 " }}}
 " {{{ final custom configuration
 set viminfo='20,\"500   " Keep a .viminfo file.
-set history=50          " keep 50 lines of command history
+set history=5000        " keep 5000 lines of command history
 set viewoptions=folds,cursor
 set completeopt=menu,menuone,preview,noselect,noinsert
 set foldmethod=indent
