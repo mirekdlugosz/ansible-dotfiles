@@ -13,6 +13,6 @@ pyenv_setup() {
     if [ ! -d "$PYENV_ROOT" ]; then
         git clone https://github.com/pyenv/pyenv.git "$PYENV_ROOT"
     fi
-    export PATH="$PYENV_ROOT/bin:$PATH"
+    export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
     eval "$(pyenv init - bash)"
 }
