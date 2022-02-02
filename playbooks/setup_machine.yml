@@ -27,6 +27,8 @@
       tags: ["R"]
     - role: starship
       tags: ["starship"]
+    - role: tmux
+      tags: ["tmux", "shell_config"]
     - role: vim
       tags: ["vim"]
     - role: z.lua

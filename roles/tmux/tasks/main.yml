@@ -1,0 +1,2 @@
+- name: Copy tmux configuration file
+  copy: src=_tmux.conf dest=~/.tmux.conf
