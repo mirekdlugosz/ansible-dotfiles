@@ -4,6 +4,7 @@ fd_perform_install: no
 lua_binary: lua53
 path_target_node_binary: "/usr/local/bin/node14"
 starship_archive: "starship-x86_64-unknown-freebsd.tar.gz"
+tmux_default_terminal: "xterm-256color"
 
 shell_extra_vars:
   EDITOR: "vim"
