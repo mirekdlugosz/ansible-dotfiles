@@ -18,6 +18,13 @@
     - "~/.bash_profile"
     - "~/.profile"
 
+- name: Installing shell scripts
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ path_local_bin }}/{{ item.path }}"
+    mode: "755"
+  with_filetree: bin/
+
 - name: Ensure clean state of modular configuration directory
   file:
     path: "{{ path_shell_config }}"

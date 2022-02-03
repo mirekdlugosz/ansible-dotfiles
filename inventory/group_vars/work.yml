@@ -5,12 +5,10 @@ vim_coc_extensions: "coc-json coc-jedi coc-snippets coc-yaml"
 shell_extra_vars:
   BROWSER: "/usr/bin/google-chrome"
   VAGRANT_DEFAULT_PROVIDER: "libvirt"
-  EDITOR: "vimx"
 
 shell_extra_paths:
   - "{{ path_local_bin }}"
   - "{{ path_npm_global }}/bin"
 
 shell_extra_configs:
-  - "rh_alias.bash"
   - "00_source_etc_bashrc.bash"

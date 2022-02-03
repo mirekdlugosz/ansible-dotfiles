@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# https://github.com/olivergondza/bash-strict-mode
+set -euo pipefail
+trap 's=$?; echo >&2 "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
+
+VIM_CMD=/usr/bin/vim
+if [ -x /usr/bin/vimx ]; then
+    VIM_CMD=/usr/bin/vimx
+fi
+
+if command -v tmux > /dev/null && [ -z "${TMUX:+x}" ]; then
+    exec tmux new-session "$VIM_CMD" "$@"
+else
+    exec "$VIM_CMD" "$@"
+fi
