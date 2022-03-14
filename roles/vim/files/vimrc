@@ -290,6 +290,7 @@ set shiftround
 set laststatus=2
 set mouse=nc
 set vb t_vb="."
+set showcmd             " display typed command until finished
 set hidden	            " don't unload buffer when switching it
 set bs=2                " Allow backspacing over everything in insert mode
 set ai                  " Always set auto-indenting on
