@@ -31,5 +31,7 @@
       tags: ["tmux", "shell_config"]
     - role: vim
       tags: ["vim"]
+    - role: xh
+      tags: ["xh", "shell_config"]
     - role: z.lua
       tags: ["z.lua", "shell_config"]

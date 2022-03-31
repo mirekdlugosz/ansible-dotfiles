@@ -59,6 +59,12 @@ vim_coc_extensions_dir: "{{ path_local_config }}/coc/extensions"
 vim_install_plugins: yes
 vim_coc_extensions: ""
 # }}}
+# {{{ xh
+xh_version: "0.15.0"
+xh_vversion: "v{{ xh_version }}"
+xh_archive: "xh-{{ xh_vversion }}-x86_64-unknown-linux-musl.tar.gz"
+xh_archive_url: "https://github.com/ducaale/xh/releases/download/{{ xh_vversion }}/{{ xh_archive }}"
+# }}}
 # {{{ z.lua
 zlua_local_path: "{{ ansible_env.HOME }}/.local/lib/z.lua"
 zlua_git_repo: "https://github.com/skywind3000/z.lua"
