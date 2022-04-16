@@ -66,6 +66,7 @@
     - "{{ path_local_bin }}/xhs"
     - "{{ path_local_bin }}/http"
     - "{{ path_local_bin }}/https"
+  when: xh_perform_install is defined and xh_perform_install
 
 - name: Find bash completion script
   find:
