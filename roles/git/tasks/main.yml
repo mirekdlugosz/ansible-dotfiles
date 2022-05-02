@@ -5,3 +5,4 @@
   loop:
     - _gitconfig
     - _gitignore_global
+    - _gitallowed-signers

@@ -30,3 +30,12 @@
     ff = only
 [branch]
 	sort = -authordate
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
+[gpg "ssh"]
+	defaultKeyCommand = ssh-add -L
+	allowedSignersFile = {{ ansible_env.HOME }}/.gitallowed-signers
