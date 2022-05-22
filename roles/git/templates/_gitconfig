@@ -39,3 +39,5 @@
 [gpg "ssh"]
 	defaultKeyCommand = ssh-add -L
 	allowedSignersFile = {{ ansible_env.HOME }}/.gitallowed-signers
+[init]
+	defaultBranch = main
