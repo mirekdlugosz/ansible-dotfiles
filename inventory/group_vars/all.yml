@@ -17,7 +17,7 @@ bat_archive_url: "https://github.com/sharkdp/bat/releases/download/{{ bat_vversi
 direnv_config_dir: "{{ path_local_config }}/direnv/"
 # }}}
 # {{{ fd 
-fd_version: "8.3.2"
+fd_version: "8.4.0"
 fd_vversion: "v{{ fd_version }}"
 fd_archive: "fd-{{ fd_vversion }}-x86_64-unknown-linux-gnu.tar.gz"
 fd_archive_url: "https://github.com/sharkdp/fd/releases/download/{{ fd_vversion }}/{{ fd_archive }}"
