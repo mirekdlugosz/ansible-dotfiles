@@ -49,7 +49,6 @@ disabled = true
 style = "bold cyan"
 
 [cmd_duration]
-min_time = 10
 format = "🕒 [$duration]($style)"
 
 [jobs]
