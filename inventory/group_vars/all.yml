@@ -1,5 +1,6 @@
 path_local_config: "{{ ansible_env.HOME }}/.config/"
 path_local_bin: "{{ ansible_env.HOME }}/.local/bin/"
+path_local_share: "{{ ansible_env.HOME }}/.local/share/"
 path_shell_config: "{{ path_local_config }}/shell/"
 
 # {{{ custom roles defaults
@@ -33,6 +34,45 @@ git_email: mirek@mirekdlugosz.com
 # }}}
 # {{{ npm
 path_npm_global: "{{ ansible_env.HOME }}/.npm-global"
+# }}}
+# {{{ nvim
+nvim_dir: "{{ path_local_config }}/nvim/"
+nvim_share_dir: "{{ path_local_share }}/nvim/"
+packer_git_repo: "https://github.com/wbthomason/packer.nvim"
+nvim_treesitter_modules:
+  - "bash"
+  - "css"
+  - "dockerfile"
+  - "html"
+  - "javascript"
+  - "json"
+  - "latex"
+  - "lua"
+  - "markdown"
+  - "php"
+  - "python"
+  - "r"
+  - "regex"
+  - "rst"
+  - "scss"
+  - "toml"
+  - "typescript"
+  - "vue"
+  - "yaml"
+nvim_treesitter_modules_exclude: []
+nvim_lsps:
+  - "ansiblels"
+  - "bashls"
+  - "dockerls"
+  - "eslint"
+  - "intelephense"
+  - "jedi_language_server"
+  - "pyright"
+  - "r_language_server"
+  - "texlab"
+  - "tsserver"
+  - "volar"
+nvim_lsps_exclude: []
 # }}}
 # {{{ R
 r_local_lib: "{{ ansible_env.HOME }}/.local/lib/R"

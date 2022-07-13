@@ -23,6 +23,10 @@
       tags: ["ipython"]
     - role: nodejs
       tags: ["nodejs"]
+    - role: nvim
+      tags: ["nvim"]
+    - role: ripgrep
+      tags: ["ripgrep"]
     - role: R
       tags: ["R"]
     - role: starship

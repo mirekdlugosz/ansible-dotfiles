@@ -1,6 +1,10 @@
 ack_perform_install: no
 git_email: mzalewsk@redhat.com
 vim_coc_extensions: "coc-json coc-jedi coc-snippets coc-yaml"
+nvim_lsps_exclude:
+  - "intelephense"
+  - "r_language_server"
+  - "texlab"
 
 shell_extra_vars:
   BROWSER: "/usr/bin/google-chrome"

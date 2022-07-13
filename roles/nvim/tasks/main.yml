@@ -1,0 +1,66 @@
+- name: "Prepare nvim directories"
+  file:
+    path: "{{ item }}"
+    state: "directory"
+  loop:
+    - "{{ nvim_dir }}"
+    - "{{ nvim_dir }}/ftplugin/"
+    - "{{ nvim_dir }}/lua/"
+    - "{{ nvim_share_dir }}/site/pack/packer/start/packer.nvim/"
+
+- name: "Copy static modular configuration files"
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ nvim_dir }}/{{ item.path }}"
+  with_filetree: .
+  when: item.state == 'file'
+
+- name: "Generate modular configuration files"
+  template:
+    src: "{{ item }}"
+    dest: "{{ nvim_dir }}/{{ item }}"
+  loop:
+    - "lua/10_opts.lua"
+    - "lua/20_plugins.lua"
+    - "lua/30_plugin_opts.lua"
+    - "lua/40_keys.lua"
+    - "init.lua"
+
+- name: "Clone packer (plugin management tool)"
+  git:
+    repo: "{{ packer_git_repo }}"
+    dest: "{{ nvim_share_dir }}/site/pack/packer/start/packer.nvim/"
+    depth: "1"
+
+- name: "Install plugins"
+  command: >
+    nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+
+- name: "Install treesitter modules"
+  command: >
+    nvim --headless -c 'TSUpdateSync' -c 'qa'
+  register: _ts_update
+  failed_when:
+    - _ts_update.rc > 1
+    - "'All parsers are up-to-date!' not in _ts_update.stderr"
+  changed_when:
+    - _ts_update.stderr != "All parsers are up-to-date!"
+
+- name: "Check installed LSP servers"
+  command: >
+    nvim --headless -c 'LspPrintInstalled' -c 'qa'
+  register: _installed_lsp_servers
+  changed_when: False
+
+- name: "Create list of LSP servers to install"
+  set_fact:
+    _missing_lsp_servers: >
+      {{
+        (nvim_lsps | difference(_installed_lsp_servers.stderr))
+        | difference(nvim_lsps_exclude)
+      }}
+
+- name: "Install LSP servers"
+  command: >
+      nvim --headless -c 'LspInstall --sync {{ _missing_lsp_servers | join(" ") }}' -c 'qa'
+  when: (_missing_lsp_servers | length) > 1
