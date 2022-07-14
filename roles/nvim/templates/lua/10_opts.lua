@@ -35,3 +35,5 @@ vim.diagnostic.config {
     underline = false,
 }
 vim.o.signcolumn = "no"
+
+vim.env.GIT_EDITOR = 'nvr -cc vsplit --remote-wait +"set bufhidden=delete"'

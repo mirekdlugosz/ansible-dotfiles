@@ -8,7 +8,7 @@
 export HISTCONTROL="$HISTCONTROL${HISTCONTROL+:}erasedups:ignorespace"
 export HISTSIZE=20000
 export HISTFILESIZE=$HISTSIZE
-export EDITOR=vim
+export EDITOR=nvim
 # https://www.reddit.com/r/linux/comments/46ubi8/ls_output_changes_considered_unacceptable/
 export QUOTING_STYLE=literal
 
