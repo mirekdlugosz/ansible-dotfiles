@@ -21,6 +21,8 @@
       tags: ["git"]
     - role: ipython
       tags: ["ipython"]
+    - role: lazygit
+      tags: ["lazygit"]
     - role: nodejs
       tags: ["nodejs"]
     - role: nvim
