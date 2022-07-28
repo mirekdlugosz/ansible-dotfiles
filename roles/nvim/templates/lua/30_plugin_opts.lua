@@ -158,6 +158,7 @@ if status_ok then
         ["<leader>p"] = {
             name = "Telescope",
             f = { "<cmd>Telescope find_files<cr>", "find files" },
+            F = { "<cmd>Telescope find_files hidden=true<cr>", "find files (including hidden)" },
             a = { "<cmd>Telescope live_grep<cr>", "find file by content" },
             p = { "<cmd>Telescope pickers<cr>", "previous pickers" },
             [";"] = { "<cmd>Telescope buffers sort_lastused=1 ignore_current_buffer=1<cr>", "buffers" },
