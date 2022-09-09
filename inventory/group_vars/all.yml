@@ -89,7 +89,7 @@ shell_extra_paths:
   - "{{ path_npm_global }}/bin"
 # }}}
 # {{{ starship
-starship_version: "1.10.2"
+starship_version: "1.10.3"
 starship_vversion: "v{{ starship_version }}"
 starship_archive: "starship-x86_64-unknown-linux-gnu.tar.gz"
 starship_archive_url: "https://github.com/starship/starship/releases/download/{{ starship_vversion }}/{{ starship_archive }}"
