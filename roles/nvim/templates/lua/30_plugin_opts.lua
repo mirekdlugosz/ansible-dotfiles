@@ -348,15 +348,15 @@ if status_ok then
     -- Use an on_attach function to only map the following keys
     -- after the language server attaches to the current buffer
     local on_attach = function(client, bufnr)
-        local rc = client.resolved_capabilities
+        local rc = client.server_capabilities
 
         if client.name == 'jedi_language_server' then
-            rc.find_references = false
+            rc.referencesProvider = false
         end
 
         if client.name == 'pyright' then
-            rc.hover = false
-            rc.signature_help = false
+            rc.hoverProvider = false
+            rc.signatureHelpProvider = false
         end
 
         -- Enable completion triggered by <c-x><c-o>
