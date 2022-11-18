@@ -24,7 +24,7 @@ fd_archive: "fd-{{ fd_vversion }}-x86_64-unknown-linux-gnu.tar.gz"
 fd_archive_url: "https://github.com/sharkdp/fd/releases/download/{{ fd_vversion }}/{{ fd_archive }}"
 # }}}
 # {{{ fzf
-fzf_version: "0.35.0"
+fzf_version: "0.35.1"
 fzf_archive: "fzf-{{ fzf_version }}-{{ ansible_system | lower }}_amd64.tar.gz"
 fzf_archive_url: "https://github.com/junegunn/fzf/releases/download/{{ fzf_version }}/{{ fzf_archive }}"
 fzf_git_repo: "https://github.com/junegunn/fzf.git"
