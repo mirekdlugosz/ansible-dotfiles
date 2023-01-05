@@ -37,7 +37,7 @@
 [tag]
 	gpgsign = true
 [gpg "ssh"]
-	defaultKeyCommand = ssh-add -L
+	defaultKeyCommand = git-ssh-sign-helper
 	allowedSignersFile = {{ ansible_env.HOME }}/.gitallowed-signers
 [init]
 	defaultBranch = main

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+SSH_KEY=$(ssh-add -L)
+if [ "$?" -eq 0 ]; then
+    echo "$SSH_KEY"
+else
+    ssh-add
+    ssh-add -L
+fi
