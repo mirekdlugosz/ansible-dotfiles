@@ -14,6 +14,7 @@ export QUOTING_STYLE=literal
 
 # Non-standard common tooling
 export FZF_DEFAULT_COMMAND='fd --type f'
+export FZF_CTRL_R_OPTS="--separator=''"
 export BAT_THEME="Monokai Extended"
 export BAT_STYLE="plain"
 export _ZL_ADD_ONCE="1"
