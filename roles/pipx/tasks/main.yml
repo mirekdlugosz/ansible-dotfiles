@@ -1,0 +1,75 @@
+- name: Check pipx
+  block:
+
+    - name: Get current pipx version
+      command: pipx --version
+      register: cmd_pipx_installed
+      ignore_errors: True
+
+    - block:
+        - name: Remove existing pipx directory due to possible Python version mismatch
+          ansible.builtin.file:
+            path: "{{ ansible_env.HOME }}/.local/pipx/"
+            state: absent
+        - name: Will install pipx
+          ansible.builtin.set_fact:
+              pipx_perform_install: True
+      when:
+        - cmd_pipx_installed.rc != 0
+
+    - name: Will install pipx
+      ansible.builtin.set_fact:
+        pipx_perform_install: True
+      when:
+        - (cmd_pipx_installed.stdout | trim ) != pipx_version
+
+  when: pipx_perform_install is undefined
+
+- name: Install pipx
+  command: python3 -m pip install --user pipx=={{ pipx_version }}
+  when: pipx_perform_install is defined and pipx_perform_install
+
+- name: Get currently installed packages
+  command: pipx list --short
+  register: cmd_pipx_pkgs_installed
+  when: pipx_packages
+
+- name: Set up Ansible dictionary for currently installed packages
+  ansible.builtin.set_fact:
+    _pipx_packages_installed: {}
+
+- name: Get currently installed packages as Ansible dictionary
+  ansible.builtin.set_fact:
+    _pipx_packages_installed: |
+      {{
+      _pipx_packages_installed
+      | combine(
+        dict([ item.partition(" ")[::2] ])
+      )
+      }}
+  loop: "{{ cmd_pipx_pkgs_installed.stdout_lines | default([]) }}"
+
+- name: Remove packages in wrong versions
+  command: pipx uninstall {{ item.key }}
+  loop: "{{ pipx_packages | dict2items }}"
+  when:
+    - item.key in _pipx_packages_installed
+    - item.value != _pipx_packages_installed[item.key]
+
+- name: Install missing packages
+  command: |
+    pipx install {{ item.key }}
+    {%- if item.value != "*" -%}=={{ item.value }}{% endif %}
+  loop: "{{ pipx_packages | dict2items }}"
+  when: |
+    item.key not in _pipx_packages_installed
+    or (
+        item.key in _pipx_packages_installed
+        and item.value != _pipx_packages_installed[item.key]
+    )
+
+- name: Remove manually installed packages
+  command: pipx uninstall {{ item.key }}
+  loop: "{{ _pipx_packages_installed | dict2items }}"
+  when:
+    - item.key not in pipx_packages

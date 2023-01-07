@@ -27,6 +27,8 @@
       tags: ["nodejs"]
     - role: nvim
       tags: ["nvim"]
+    - role: pipx
+      tags: ["pipx"]
     - role: ripgrep
       tags: ["ripgrep"]
     - role: R

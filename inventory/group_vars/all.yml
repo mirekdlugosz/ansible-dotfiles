@@ -80,6 +80,17 @@ nvim_lsps:
   - "volar"
 nvim_lsps_exclude: []
 # }}}
+# {{{ pipx
+pipx_version: "1.1.0"
+pipx_packages:
+  cookiecutter: "*"
+  git-filter-repo: "*"
+  jedi-language-server: "*"
+  neovim-remote: "*"
+  nox: "2022.11.21"
+  poetry: "1.3.0"
+  reuse: "*"
+# }}}
 # {{{ R
 r_local_lib: "{{ ansible_env.HOME }}/.local/lib/R"
 # }}}
