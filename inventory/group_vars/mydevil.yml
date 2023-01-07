@@ -4,7 +4,7 @@ fd_perform_install: no
 pipx_perform_install: no
 pipx_packages: {}
 lua_binary: lua53
-path_target_node_binary: "/usr/local/bin/node14"
+path_target_node_binary: "/usr/local/bin/node16"
 lazygit_archive: "lazygit_{{ lazygit_version }}_freebsd_x86_64.tar.gz"
 starship_perform_install: no
 starship_archive: "starship-x86_64-unknown-freebsd.tar.gz"
