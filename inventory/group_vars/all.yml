@@ -91,6 +91,15 @@ pipx_packages:
   poetry: "1.3.0"
   reuse: "*"
 # }}}
+# {{{ pyenv
+pyenv_local_path: "{{ ansible_env.HOME }}/.pyenv"
+pyenv_git_repo: "https://github.com/pyenv/pyenv.git"
+pyenv_wrapper_script: "{{ pyenv_local_path }}/.ansible_pyenv_wrapper"
+pyenv_versions:
+  - 3.8.16
+  - 3.9.16
+  - 3.10.9
+# }}}
 # {{{ R
 r_local_lib: "{{ ansible_env.HOME }}/.local/lib/R"
 # }}}

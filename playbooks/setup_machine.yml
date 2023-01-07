@@ -29,6 +29,8 @@
       tags: ["nvim"]
     - role: pipx
       tags: ["pipx"]
+    - role: pyenv
+      tags: ["pyenv"]
     - role: ripgrep
       tags: ["ripgrep"]
     - role: R
