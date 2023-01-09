@@ -5,6 +5,16 @@ nvim_lsps_exclude:
   - "intelephense"
   - "r_language_server"
   - "texlab"
+pipx_packages:
+  crc-bonfire: "*"
+  cookiecutter: "*"
+  git-filter-repo: "*"
+  jedi-language-server: "*"
+  neovim-remote: "*"
+  nox: "2022.11.21"
+  poetry: "1.3.0"
+  python-openstackclient: "*"
+  reuse: "*"
 
 shell_extra_vars:
   BROWSER: "/usr/bin/google-chrome"
