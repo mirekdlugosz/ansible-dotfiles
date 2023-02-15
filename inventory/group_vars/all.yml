@@ -98,7 +98,7 @@ pyenv_wrapper_script: "{{ pyenv_local_path }}/.ansible_pyenv_wrapper"
 pyenv_versions:
   - 3.8.16
   - 3.9.16
-  - 3.10.9
+  - 3.10.10
 # }}}
 # {{{ R
 r_local_lib: "{{ ansible_env.HOME }}/.local/lib/R"
