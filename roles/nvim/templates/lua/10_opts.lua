@@ -27,7 +27,7 @@ vim.o.mouse = "nc"
 vim.o.clipboard = "unnamedplus"
 -- When doing tab completion, give the following files lower priority.
 vim.o.suffixes = vim.o.suffixes .. ",.info,.aux,.log,.dvi,.bbl,.out,.o,.lo"
-vim.o.diffopt = "filler,internal,algorithm:histogram,indent-heuristic"
+vim.o.diffopt = "filler,internal,algorithm:histogram,indent-heuristic,linematch:60"
 
 vim.diagnostic.config {
     virtual_text = false,

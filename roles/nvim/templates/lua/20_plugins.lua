@@ -35,9 +35,6 @@ return require('packer').startup(function(use)
     -- remember last cursor position
     use  'farmergreg/vim-lastplace'
 
-    -- editorconfig
-    use 'editorconfig/editorconfig-vim'
-
     -- fuzzy-search for files, buffers, errors, ...
     use {
         'nvim-telescope/telescope.nvim',
