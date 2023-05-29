@@ -88,7 +88,7 @@ pipx_packages:
   jedi-language-server: "*"
   neovim-remote: "*"
   nox: "2023.4.22"
-  poetry: "1.5.0"
+  poetry: "1.5.1"
   reuse: "*"
 # }}}
 # {{{ pyenv
