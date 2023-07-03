@@ -4,6 +4,7 @@ fd_perform_install: no
 pipx_perform_install: no
 pipx_packages: {}
 pyenv_perform_install: no
+rust_perform_install: no
 lua_binary: lua53
 path_target_node_binary: "/usr/local/bin/node18"
 lazygit_archive: "lazygit_{{ lazygit_version }}_freebsd_x86_64.tar.gz"

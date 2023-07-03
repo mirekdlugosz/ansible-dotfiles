@@ -35,6 +35,8 @@
       tags: ["ripgrep"]
     - role: R
       tags: ["R"]
+    - role: rust
+      tags: ["rust"]
     - role: starship
       tags: ["starship"]
     - role: tmux

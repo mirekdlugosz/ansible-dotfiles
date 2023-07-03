@@ -59,6 +59,7 @@ nvim_treesitter_modules:
   - "python"
   - "r"
   - "regex"
+  - "rust"
   - "rst"
   - "scss"
   - "toml"
@@ -75,6 +76,7 @@ nvim_lsps:
   - "jedi_language_server"
   - "pyright"
   - "r_language_server"
+  - "rust_analyzer"
   - "texlab"
   - "tsserver"
   - "volar"
@@ -108,6 +110,7 @@ r_local_lib: "{{ ansible_env.HOME }}/.local/lib/R"
 shell_extra_paths:
   - "{{ path_local_bin }}"
   - "{{ path_npm_global }}/bin"
+  - "{{ ansible_env.HOME }}/.cargo/bin"
 # }}}
 # {{{ starship
 starship_version: "1.15.0"

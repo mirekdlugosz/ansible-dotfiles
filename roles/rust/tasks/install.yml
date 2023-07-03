@@ -1,0 +1,22 @@
+- name: Prepare tmp directory
+  tempfile:
+    state: directory
+    suffix: rustup
+  register: rustup_tmp_dir
+
+- set_fact:
+    rustup_script_path: "{{ rustup_tmp_dir.path }}/rustup-init.sh"
+
+- name: Download rustup installer script
+  ansible.builtin.get_url:
+    url: "https://sh.rustup.rs"
+    dest: "{{ rustup_script_path }}"
+    mode: '755'
+
+- name: Run rustup installer script
+  ansible.builtin.command: "{{ rustup_script_path }} -y --no-modify-path -c rust-analyzer,rust-src"
+
+- name: Clean up build directory
+  file:
+    path: "{{ rustup_tmp_dir.path }}"
+    state: absent
