@@ -326,7 +326,6 @@ if status_ok then
     null_ls.setup({
         sources = {
             null_ls.builtins.diagnostics.eslint,
-            null_ls.builtins.diagnostics.flake8,
             null_ls.builtins.formatting.black,
         }
     })
@@ -482,17 +481,4 @@ if status_ok then
     }
 end
 -- >>>
-
--- <<< vim-pandoc/vim-pandoc
-vim.cmd([[
-    let pandoc#modules#disabled = ['command', 'menu'] " list of unwanted modules
-    let pandoc#syntax#conceal#use = 0 " 'conceal' means 'show results instead of formatting', which makes working with text harder
-    let pandoc#folding#fdc = 0	" by default, first column is lost for fold information
-    let pandoc#folding#fold_fenced_codeblocks = 1	" fold code blocks
-    let pandoc#spell#enabled = 0 " spellchecking is distracting while writing
-    let pandoc#spell#default_langs = ["pl"]	" spellcheck languages
-    let pandoc#hypertext#open_editable_alternates = 0 " when opening file.html, vim-pandoc would try file.md instead, if it exists
-    ]],
-    false
-)
 -- >>>

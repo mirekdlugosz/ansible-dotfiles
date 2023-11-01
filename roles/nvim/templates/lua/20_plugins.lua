@@ -94,10 +94,6 @@ return require('packer').startup(function(use)
         'JoosepAlviste/nvim-ts-context-commentstring',
         requires = { {'nvim-treesitter/nvim-treesitter'} },
     }
-
-    -- Pandoc
-    use 'vim-pandoc/vim-pandoc'
-    use 'vim-pandoc/vim-pandoc-syntax'
     -- >>>
 
 end)

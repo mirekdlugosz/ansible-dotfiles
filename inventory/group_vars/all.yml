@@ -55,6 +55,7 @@ nvim_treesitter_modules:
   - "latex"
   - "lua"
   - "markdown"
+  - "markdown_inline"
   - "php"
   - "python"
   - "r"
