@@ -57,12 +57,13 @@ return require('packer').startup(function(use)
 
     -- LSP
     -- ready to use configs
-    use "williamboman/nvim-lsp-installer"
+    use "williamboman/mason.nvim"
+    use "williamboman/mason-lspconfig.nvim"
     use "neovim/nvim-lspconfig"
 
     -- Use lua scripts to provide LSP features
     -- contains wrappers for many command-line tools, like black
-    use 'jose-elias-alvarez/null-ls.nvim'
+    use 'nvimtools/none-ls.nvim'
 
     -- nvim-cmp - expand LSP completions with data from other sources, like
     -- words in buffer, paths and snippets

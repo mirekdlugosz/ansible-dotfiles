@@ -48,7 +48,9 @@
 
 - name: "Check installed LSP servers"
   command: >
-    nvim --headless -c 'LspPrintInstalled' -c 'qa'
+    nvim --headless
+    -c 'lua vim.print(vim.json.encode(require("mason-lspconfig").get_installed_servers()))'
+    -c 'qa'
   register: _installed_lsp_servers
   changed_when: False
 
@@ -62,5 +64,5 @@
 
 - name: "Install LSP servers"
   command: >
-      nvim --headless -c 'LspInstall --sync {{ _missing_lsp_servers | join(" ") }}' -c 'qa'
+      nvim --headless -c 'LspInstall {{ _missing_lsp_servers | join(" ") }}' -c 'qa'
   when: (_missing_lsp_servers | length) > 1

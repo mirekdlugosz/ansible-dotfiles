@@ -237,20 +237,24 @@ vim.g.ale_completion_enabled = 0
 vim.g.ale_use_global_executables = 1
 -- >>>
 
--- <<< williamboman/nvim-lsp-installer
-local status_ok, lsp_installer = pcall(require, "nvim-lsp-installer")
+-- <<< williamboman/mason.nvim
+local status_ok, mason = pcall(require, "mason")
 if status_ok then
-    lsp_installer.setup {
-        automatic_installation = false,
-    }
-    lsp_installer.settings({
+    mason.setup({
         ui = {
             icons = {
-                server_installed = "✓",
-                server_pending = "➜",
-                server_uninstalled = "✗"
+                package_installed = "✓",
+                package_pending = "➜",
+                package_uninstalled = "✗",
             }
         }
+    })
+end
+
+local status_ok, mason_lsp_config = pcall(require, "mason-lspconfig")
+if status_ok then
+    mason_lsp_config.setup({
+        automatic_installation = false,
     })
 end
 -- >>>
@@ -320,7 +324,7 @@ end
 
 -- >>>
 
--- <<< jose-elias-alvarez/null-ls.nvim
+-- <<< nvimtools/none-ls.nvim
 local status_ok, null_ls = pcall(require, "null-ls")
 if status_ok then
     null_ls.setup({
