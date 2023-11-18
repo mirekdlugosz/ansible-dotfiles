@@ -1,0 +1,46 @@
+- name: Check fx
+  when: fx_perform_install is undefined
+  block:
+  - name: Checking if fx is available
+    command: fx --version
+    register: cmd_fx_installed
+    ignore_errors: True
+
+  - name: Checking fx version
+    shell: "fx --version"
+    register: cmd_fx_version
+    when:
+      - cmd_fx_installed.rc == 0
+
+  - set_fact:
+      fx_perform_install: True
+    when:
+      - cmd_fx_installed.rc != 0 or cmd_fx_version.stdout != fx_version
+
+- name: Install fx
+  when: fx_perform_install is defined and fx_perform_install
+  block:
+
+  - name: Preparing tmp directory
+    tempfile:
+      state: directory
+      suffix: fx
+    register: fx_tmp_dir
+
+  - name: Downloading fx binary
+    get_url:
+      url: "{{ fx_binary_url }}"
+      dest: "{{ fx_tmp_dir.path }}/{{ fx_binary }}"
+
+  - name: Installing fx
+    command: "cp {{ fx_tmp_dir.path }}/{{ fx_binary }} {{ path_local_bin }}/fx"
+
+  - name: Ensuring correct executable permissions
+    file:
+      path: "{{ path_local_bin }}/fx"
+      mode: "0775"
+
+  - name: Clean up build directory
+    file:
+      path: "{{ fx_tmp_dir.path }}"
+      state: absent
