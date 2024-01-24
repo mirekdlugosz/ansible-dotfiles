@@ -26,6 +26,7 @@
     whitespace = strip
 [diff]
     noprefix = true
+    algorithm = histogram
 [pull]
     ff = only
 [branch]
