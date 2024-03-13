@@ -329,7 +329,6 @@ local status_ok, null_ls = pcall(require, "null-ls")
 if status_ok then
     null_ls.setup({
         sources = {
-            null_ls.builtins.diagnostics.eslint,
             null_ls.builtins.formatting.black,
         }
     })
