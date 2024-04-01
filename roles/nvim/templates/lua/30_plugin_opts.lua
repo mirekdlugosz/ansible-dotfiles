@@ -207,6 +207,16 @@ if status_ok then
 end
 -- >>>
 
+-- <<< ggandor/leap.nvim
+local status_ok, leap = pcall(require, "leap")
+if status_ok then
+    -- leap.create_default_mappings()
+    vim.keymap.set('n',        's', '<Plug>(leap)')
+    vim.keymap.set({'x', 'o'}, 's', '<Plug>(leap-forward)')
+    vim.keymap.set({'x', 'o'}, 'S', '<Plug>(leap-backward)')
+end
+-- >>>
+
 -- <<< akinsho/toggleterm.nvim
 local status_ok, toggleterm = pcall(require, "toggleterm")
 if status_ok then

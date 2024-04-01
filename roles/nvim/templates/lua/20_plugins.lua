@@ -45,6 +45,9 @@ return require('packer').startup(function(use)
 
     -- which-key - available completions for started command
 	use 'folke/which-key.nvim'
+
+    -- leap - quickly jump to any place displayed on a screen
+    use 'ggandor/leap.nvim'
     -- >>>
 
     -- <<< Programming
