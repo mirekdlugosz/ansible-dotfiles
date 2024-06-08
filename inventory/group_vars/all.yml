@@ -107,7 +107,7 @@ pyenv_versions:
   - 3.9.19
   - 3.10.14
   - 3.11.9
-  - 3.12.2
+  - 3.12.4
 # }}}
 # {{{ R
 r_local_lib: "{{ ansible_env.HOME }}/.local/lib/R"
