@@ -136,7 +136,7 @@ vim_install_plugins: yes
 vim_coc_extensions: ""
 # }}}
 # {{{ xh
-xh_version: "0.22.0"
+xh_version: "0.22.2"
 xh_vversion: "v{{ xh_version }}"
 xh_archive: "xh-{{ xh_vversion }}-x86_64-unknown-linux-musl.tar.gz"
 xh_archive_url: "https://github.com/ducaale/xh/releases/download/{{ xh_vversion }}/{{ xh_archive }}"
