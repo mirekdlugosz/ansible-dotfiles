@@ -30,8 +30,9 @@ fx_binary_url: "https://github.com/antonmedv/fx/releases/download/{{ fx_version 
 # }}}
 # {{{ fzf
 fzf_version: "0.54.3"
+fzf_vversion: "v{{ fzf_version }}"
 fzf_archive: "fzf-{{ fzf_version }}-{{ ansible_system | lower }}_amd64.tar.gz"
-fzf_archive_url: "https://github.com/junegunn/fzf/releases/download/{{ fzf_version }}/{{ fzf_archive }}"
+fzf_archive_url: "https://github.com/junegunn/fzf/releases/download/{{ fzf_vversion }}/{{ fzf_archive }}"
 fzf_git_repo: "https://github.com/junegunn/fzf.git"
 # }}}
 # {{{ git
