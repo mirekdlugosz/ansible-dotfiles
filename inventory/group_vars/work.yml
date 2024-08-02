@@ -5,6 +5,7 @@ nvim_lsps_exclude:
   - "intelephense"
   - "r_language_server"
   - "texlab"
+pipx_perform_install: no
 pipx_packages:
   crc-bonfire: "*"
   cookiecutter: "*"
