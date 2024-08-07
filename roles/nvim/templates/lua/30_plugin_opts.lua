@@ -392,6 +392,7 @@ if status_ok then
 
         if client.name == 'jedi_language_server' then
             rc.referencesProvider = false
+            rc.definitionProvider = false
         end
 
         if client.name == 'pyright' then
