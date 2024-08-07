@@ -241,6 +241,7 @@ if status_ok then
     vim.keymap.set('n',        's', '<Plug>(leap)')
     vim.keymap.set({'x', 'o'}, 's', '<Plug>(leap-forward)')
     vim.keymap.set({'x', 'o'}, 'S', '<Plug>(leap-backward)')
+    vim.api.nvim_set_hl(0, 'LeapLabel', { link = 'ErrorMsg' })
 end
 -- >>>
 
