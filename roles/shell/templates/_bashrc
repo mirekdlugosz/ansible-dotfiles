@@ -6,7 +6,7 @@
 # anything or bad things will happen !
 
 export HISTCONTROL="$HISTCONTROL${HISTCONTROL+:}erasedups:ignorespace"
-export HISTSIZE=20000
+export HISTSIZE=40000
 export HISTFILESIZE=$HISTSIZE
 export EDITOR=nvim
 # https://www.reddit.com/r/linux/comments/46ubi8/ls_output_changes_considered_unacceptable/
