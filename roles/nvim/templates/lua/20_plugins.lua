@@ -9,8 +9,7 @@ return require('packer').startup(function(use)
     use 'nvim-lualine/lualine.nvim'
 
     -- better color scheme
-    use 'Mofiqul/dracula.nvim'
-    use 'nanotech/jellybeans.vim'
+    use { "catppuccin/nvim", as = "catppuccin" }
 
     -- Automatically surround by tags, brackets, ...
     --use 'tpope/vim-surround'

@@ -17,43 +17,34 @@ local lspfunctions = {
 }
 -- >>>
 
--- <<< colors - jellybeans
+-- <<< colors - catppuccin
 vim.g.background = 'dark'
-vim.cmd(
-[[
-let g:jellybeans_overrides = {
-\    'background': { 'ctermbg': 'none', '256ctermbg': 'none' },
-\    'SpellCap': { '256ctermfg': '99', '256ctermbg': 'none', 'attr': 'underline' },
-\    'SignColumn': { '256ctermfg': '81', '256ctermbg': 'none' },
-\    'Todo': { 'attr': 'reverse' },
-\    'Pmenu': { '256ctermfg': '250', '256ctermbg': '237' },
-\    'PmenuSel': { '256ctermfg': '81', '256ctermbg': '237', 'attr': 'bold' },
-\    'PmenuSbar': { '256ctermfg': '16', '256ctermbg': '237', 'guifg': 'none', 'guibg': 'none' },
-\    'PmenuThumb': { '256ctermfg': '235', '256ctermbg': '243', 'guifg': 'none', 'guibg': 'none' },
-\    'Folded': { '256ctermbg': 'none'},
-\}
-]],
-false)
-
-pcall(vim.cmd, [[colorscheme jellybeans]])
 
 vim.cmd([[highlight link ALEError SpellCap]])
+
+local status_ok, catppuccin = pcall(require, "catppuccin")
+if status_ok then
+    catppuccin.setup {
+        flavour = "mocha",
+        show_end_of_buffer = true,
+        term_colors = true,
+        no_italic = true,
+        integrations = {
+            cmp = true,
+            leap = true,
+            lsp_trouble = true,
+            mason = true,
+            treesitter = true,
+            which_key = true,
+        }
+    }
+end
+vim.cmd.colorscheme "catppuccin"
 -- >>>
 
 -- <<< nvim-lualine/lualine.nvim
 local status_ok, lualine = pcall(require, "lualine")
 if status_ok then
-    -- Overrides
-    local custom_jellybeans = require('lualine.themes.jellybeans')
-    for _, mode in ipairs({ "normal", "insert", "visual", "replace", "inactive" }) do
-        local reference_mode = mode
-        if custom_jellybeans[mode].c == nil then
-            reference_mode = "normal"
-        end
-        custom_jellybeans[mode].y = custom_jellybeans[reference_mode].c
-        custom_jellybeans[mode].z = custom_jellybeans[reference_mode].c
-    end
-
     -- encoding: Don't display if encoding is UTF-8.
     local function encoding()
         local ret, _ = (vim.bo.fenc or vim.go.enc):gsub("^utf%-8$", "")
@@ -68,7 +59,7 @@ if status_ok then
     lualine.setup {
         options = {
             icons_enabled = false,
-            theme = custom_jellybeans,
+            theme = "catppuccin",
             component_separators = { left = '', right = '' },
             section_separators = { left = '', right = '' },
         },
