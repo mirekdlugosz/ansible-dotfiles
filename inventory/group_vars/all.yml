@@ -85,7 +85,7 @@ nvim_lsps:
   - "r_language_server"
   - "rust_analyzer"
   - "texlab"
-  - "tsserver"
+  - "ts_ls"
   - "volar"
 nvim_lsps_exclude: []
 # }}}
