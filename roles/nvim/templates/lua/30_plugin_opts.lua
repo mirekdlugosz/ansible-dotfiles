@@ -36,7 +36,14 @@ if status_ok then
             mason = true,
             treesitter = true,
             which_key = true,
-        }
+        },
+        custom_highlights = function(colors)
+            return {
+                -- bg in source is `U.darken(C.sky, 0.30, C.base)`
+                CurSearch = { fg = colors.text, bg = "#3e5767" },
+                Folded = { bg = colors.none },
+            }
+        end,
     }
 end
 vim.cmd.colorscheme "catppuccin"
@@ -79,6 +86,14 @@ if status_ok then
             lualine_x = { encoding, fileformat, 'filetype' },
             lualine_y = { },
             lualine_z = { 'location', 'progress' },
+        },
+        inactive_sections = {
+            lualine_c = {
+                {
+                    'filename',
+                    path = 1,
+                },
+            },
         },
         extensions = {
             'toggleterm',
