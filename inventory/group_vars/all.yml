@@ -50,7 +50,7 @@ path_npm_global: "{{ ansible_env.HOME }}/.npm-global"
 # {{{ nvim
 nvim_dir: "{{ path_local_config }}/nvim/"
 nvim_share_dir: "{{ path_local_share }}/nvim/"
-packer_git_repo: "https://github.com/wbthomason/packer.nvim"
+lazy_nvim_git_repo: "https://github.com/folke/lazy.nvim.git"
 nvim_treesitter_modules:
   - "bash"
   - "css"

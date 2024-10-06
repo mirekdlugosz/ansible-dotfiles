@@ -6,7 +6,7 @@
     - "{{ nvim_dir }}"
     - "{{ nvim_dir }}/ftplugin/"
     - "{{ nvim_dir }}/lua/"
-    - "{{ nvim_share_dir }}/site/pack/packer/start/packer.nvim/"
+    - "{{ nvim_share_dir }}/lazy/lazy.nvim/"
 
 - name: "Copy static modular configuration files"
   copy:
@@ -28,13 +28,13 @@
 
 - name: "Clone packer (plugin management tool)"
   git:
-    repo: "{{ packer_git_repo }}"
-    dest: "{{ nvim_share_dir }}/site/pack/packer/start/packer.nvim/"
-    depth: "1"
+    repo: "{{ lazy_nvim_git_repo }}"
+    dest: "{{ nvim_share_dir }}/lazy/lazy.nvim/"
+    version: "stable"
 
 - name: "Install plugins"
   command: >
-    nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+    nvim --headless -c 'Lazy! sync' -c 'qa'
 
 - name: "Install treesitter modules"
   command: >
