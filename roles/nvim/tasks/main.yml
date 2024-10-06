@@ -58,11 +58,11 @@
   set_fact:
     _missing_lsp_servers: >
       {{
-        (nvim_lsps | difference(_installed_lsp_servers.stderr))
+        (nvim_lsps | difference(_installed_lsp_servers.stderr_lines[-1] | from_json))
         | difference(nvim_lsps_exclude)
       }}
 
 - name: "Install LSP servers"
   command: >
       nvim --headless -c 'LspInstall {{ _missing_lsp_servers | join(" ") }}' -c 'qa'
-  when: (_missing_lsp_servers | length) > 1
+  when: (_missing_lsp_servers | length) >= 1
