@@ -17,55 +17,91 @@
     - bat_perform_install is undefined
     - cmd_bat_installed.rc != 0 or cmd_bat_version.stdout != bat_version
 
-- name: Preparing tmp directory
-  tempfile:
-    state: directory
-    suffix: bat
-  register: bat_tmp_dir
+- name: Set up bat
   when: bat_perform_install is defined and bat_perform_install
+  block:
 
-- name: Downloading bat archive
-  get_url:
-    url: "{{ bat_archive_url }}"
-    dest: "{{ bat_tmp_dir.path }}/{{ bat_archive }}"
-  when: bat_perform_install is defined and bat_perform_install
+  - name: Preparing tmp directory
+    tempfile:
+      state: directory
+      suffix: bat
+    register: bat_tmp_dir
 
-- name: Extracting bat archive
-  unarchive:
-    src: "{{ bat_tmp_dir.path }}/{{ bat_archive }}"
-    dest: "{{ bat_tmp_dir.path }}"
-    remote_src: yes
-  when: bat_perform_install is defined and bat_perform_install
+  - name: Downloading bat archive
+    get_url:
+      url: "{{ bat_archive_url }}"
+      dest: "{{ bat_tmp_dir.path }}/{{ bat_archive }}"
 
-- name: Find extracted bat executable
-  find:
-    paths: "{{ bat_tmp_dir.path }}"
-    patterns: "^bat$"
-    recurse: yes
-    use_regex: yes
-  register: bat_find_results
-  when: bat_perform_install is defined and bat_perform_install
+  - name: Extracting bat archive
+    unarchive:
+      src: "{{ bat_tmp_dir.path }}/{{ bat_archive }}"
+      dest: "{{ bat_tmp_dir.path }}"
+      remote_src: yes
 
-- name: Installing bat
-  command: "cp {{ item.path }} {{ path_local_bin }}/bat"
-  with_items: "{{ bat_find_results.files }}"
-  when: bat_perform_install is defined and bat_perform_install
+  - name: Find extracted bat executable
+    find:
+      paths: "{{ bat_tmp_dir.path }}"
+      patterns: "^bat$"
+      recurse: yes
+      use_regex: yes
+    register: bat_find_results
 
-- name: Ensuring correct executable permissions
-  file:
-    path: "{{ path_local_bin }}/bat"
-    mode: "0775"
-  when: bat_perform_install is defined and bat_perform_install
+  - name: Installing bat
+    command: "cp {{ item.path }} {{ path_local_bin }}/bat"
+    with_items: "{{ bat_find_results.files }}"
 
-- name: Creating 'cat' -> 'bat' link in local bin directory
-  file:
-    src: "{{ path_local_bin }}/bat"
-    dest: "{{ path_local_bin }}/cat"
-    state: link
-  when: bat_perform_install is defined and bat_perform_install
+  - name: Ensuring correct executable permissions
+    file:
+      path: "{{ path_local_bin }}/bat"
+      mode: "0775"
 
-- name: Clean up build directory
-  file:
-    path: "{{ bat_tmp_dir.path }}"
-    state: absent
-  when: bat_perform_install is defined and bat_perform_install
+  - name: Creating 'cat' -> 'bat' link in local bin directory
+    file:
+      src: "{{ path_local_bin }}/bat"
+      dest: "{{ path_local_bin }}/cat"
+      state: link
+
+  - name: Obtain path to bat config directory
+    command: "{{ path_local_bin }}/bat --config-dir"
+    register: cmd_bat_config_dir
+
+  - set_fact:
+      bat_config_theme_dir: "{{ cmd_bat_config_dir.stdout }}/themes/"
+
+  - name: Creating bat themes configuration directory
+    file:
+      dest: "{{ bat_config_theme_dir }}"
+      state: directory
+
+  - name: Preparing directory for catppuccin bat theme git
+    tempfile:
+      state: directory
+      suffix: catbat
+    register: catppuccin_bat_git_dir
+
+  - name: Cloning catppuccin bat theme
+    git:
+      repo: "{{ catppuccin_bat_theme_git_repo }}"
+      dest: "{{ catppuccin_bat_git_dir.path }}"
+      depth: "1"
+
+  - name: Copy catppuccin bat theme files
+    ansible.builtin.copy:
+      src: "{{ item }}"
+      dest: "{{ bat_config_theme_dir }}"
+    with_fileglob:
+      - "{{ catppuccin_bat_git_dir.path }}/themes/*.tmTheme"
+
+  - name: Rebuilding bat cache
+    command: "{{ path_local_bin }}/bat cache --build"
+
+  - name: Clean up build directory
+    file:
+      path: "{{ bat_tmp_dir.path }}"
+      state: absent
+
+  - name: Clean up catppuccin bat theme directory
+    file:
+      path: "{{ catppuccin_bat_git_dir.path }}"
+      state: absent
+

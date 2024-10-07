@@ -13,6 +13,7 @@ bat_version: "0.24.0"
 bat_vversion: "v{{ bat_version }}"
 bat_archive: "bat-{{ bat_vversion }}-x86_64-unknown-linux-gnu.tar.gz"
 bat_archive_url: "https://github.com/sharkdp/bat/releases/download/{{ bat_vversion }}/{{ bat_archive }}"
+catppuccin_bat_theme_git_repo: "https://github.com/catppuccin/bat.git"
 # }}}
 # {{{ direnv
 direnv_config_dir: "{{ path_local_config }}/direnv/"
