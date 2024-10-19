@@ -10,12 +10,8 @@ layout_python-venv() {
 	export VIRTUAL_ENV
 
 	if [[ ! -d $VIRTUAL_ENV ]]; then
-		log_status "no venv found; creating $VIRTUAL_ENV"
-		if [[ $python =~ "python3" ]]; then
-			"$python" -m venv "$VIRTUAL_ENV"
-		else
-			virtualenv "$VIRTUAL_ENV"
-		fi
+		log_status "no venv found; creating $VIRTUAL_ENV using $python"
+		"$python" -m venv --copies "$VIRTUAL_ENV"
 	fi
 	PATH_add "$VIRTUAL_ENV/bin"
 }
