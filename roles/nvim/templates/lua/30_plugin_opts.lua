@@ -13,7 +13,7 @@ local lspfunctions = {
     signature_help = vim.lsp.buf.signature_help,
     rename = vim.lsp.buf.rename,
     code_action = vim.lsp.buf.code_action,
-    formatting = vim.lsp.buf.formatting,
+    format = vim.lsp.buf.format,
 }
 -- >>>
 
@@ -222,7 +222,7 @@ if status_ok then
         { "<leader>lk", desc = "vim.lsp.buf.signature_help" },
         { "<leader>lR", desc = "vim.lsp.buf.rename" },
         { "<leader>lc", desc = "vim.lsp.buf.code_action" },
-        { "<leader>lf", desc = "vim.lsp.buf.formatting" },
+        { "<leader>lf", desc = "vim.lsp.buf.format" },
 
         { "<leader>t", group = "Terminals" },
         { "<leader>t1", desc = "1" },
@@ -422,7 +422,7 @@ if status_ok then
         vim.keymap.set('n', '<leader>lk', lspfunctions["signature_help"], bufopts)
         vim.keymap.set('n', '<leader>lR', lspfunctions["rename"], bufopts)
         vim.keymap.set('n', '<leader>lc', lspfunctions["code_action"], bufopts)
-        vim.keymap.set('n', '<leader>lf', lspfunctions["formatting"], bufopts)
+        vim.keymap.set('n', '<leader>lf', lspfunctions["format"], bufopts)
     end
     -- >>>
     -- <<< lsp_flags
