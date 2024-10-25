@@ -16,3 +16,10 @@ pyenv_setup() {
     export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
     eval "$(pyenv init - bash)"
 }
+
+wezterm-set-tab-title() {
+    if hash base64 2>/dev/null ; then
+        local new_title=$(echo -n "$1" | base64)
+        printf "\033]1337;SetUserVar=tab_title_prefix=%s\007" "$new_title"
+    fi
+}

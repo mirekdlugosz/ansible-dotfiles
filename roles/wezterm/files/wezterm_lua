@@ -1,0 +1,201 @@
+local wezterm = require 'wezterm'
+local io = require 'io'
+local os = require 'os'
+
+local config = wezterm.config_builder()
+
+--{{{ normal settings etc.
+config.use_fancy_tab_bar = false
+config.hide_tab_bar_if_only_one_tab = true
+config.tab_max_width = 200
+config.scrollback_lines = 100000
+
+config.audible_bell = "Disabled"
+config.window_padding = {
+    left = '0',
+    right = '0',
+    top = '0',
+    bottom = '0',
+}
+--}}}
+
+--{{{ colors and fonts
+local catppuccin_mocha = wezterm.color.get_builtin_schemes()['Catppuccin Mocha']
+
+catppuccin_mocha.tab_bar.active_tab = {
+    bg_color = '#313244',
+    fg_color = '#cdd6f4',
+    intensity = 'Normal',
+    italic = false,
+    strikethrough = false,
+    underline = 'None',
+}
+catppuccin_mocha.tab_bar.inactive_tab = {
+    bg_color = '#11111b',
+    fg_color = '#cdd6f4',
+    intensity = 'Normal',
+    italic = false,
+    strikethrough = false,
+    underline = 'None',
+}
+catppuccin_mocha.copy_mode_inactive_highlight_fg = { Color = "#f5c2e7" }
+catppuccin_mocha.copy_mode_inactive_highlight_bg = { Color = "#1e1e2e" }
+config.color_schemes = {
+    ["MyCatppuccin"] = catppuccin_mocha,
+}
+
+config.color_scheme = "MyCatppuccin"
+config.font = wezterm.font({
+    family = "Intel One Mono",
+    weight = "Medium",
+    stretch = "Normal",
+    style = "Normal",
+    harfbuzz_features = {}
+})
+config.font_size = 15.0
+--}}}
+
+--{{{ key bindingsCTRL
+config.keys = {
+    {
+        key = "LeftArrow",
+        mods = "SHIFT",
+        action = wezterm.action.ActivateTabRelative(-1),
+    },
+    {
+        key = "RightArrow",
+        mods = "SHIFT",
+        action = wezterm.action.ActivateTabRelative(1),
+    },
+    {
+        key = "LeftArrow",
+        mods = "SHIFT | CTRL",
+        action = wezterm.action.MoveTabRelative(-1),
+    },
+    {
+        key = "RightArrow",
+        mods = "SHIFT | CTRL",
+        action = wezterm.action.MoveTabRelative(1),
+    },
+    {
+      key = 'S',
+      mods = 'SHIFT | CTRL',
+      action = wezterm.action.EmitEvent 'save-scrollback-to-file',
+    },
+    {
+      key = 'N',
+      mods = 'SHIFT | CTRL',
+      action = wezterm.action.EmitEvent 'spawn-new-maximized-window',
+    },
+    {
+      key = '<', -- really comma (,)
+      mods = 'SHIFT | CTRL',
+      action = wezterm.action.ActivateCopyMode,
+    },
+}
+---}}}
+
+---{{{ helper functions and event handlers
+function basename(s)
+  return string.gsub(s, '(.*[/\\])(.*)', '%2')
+end
+
+local function get_current_working_dir(tab)
+    local cwd_path = tab.active_pane.current_working_dir
+    if cwd_path == nil then
+        return ''
+    end
+	local current_dir = cwd_path.path
+    current_dir = current_dir:gsub(os.getenv("HOME"), "~", 1)
+    return current_dir
+end
+
+local function get_unseen_output_string(tab)
+    if tab.is_active then
+        return ''
+    end
+    local has_unseen_output = false
+    for _, pane in ipairs(tab.panes) do
+        if pane.has_unseen_output then
+            has_unseen_output = true
+            break
+        end
+    end
+    if has_unseen_output then
+        return '* '
+    end
+    return ''
+end
+
+local function get_user_title_prefix(tab)
+    local user_title = tab.active_pane.user_vars.tab_title_prefix
+    if user_title ~= nil and #user_title > 0 then
+        return user_title .. ' '
+    end
+    return ''
+end
+
+wezterm.on("gui-startup", function(cmd)
+    local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
+    window:gui_window():maximize()
+end)
+
+wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+    local active_working_dir = get_current_working_dir(tab)
+    local active_fg_process = tab.active_pane.foreground_process_name or ''
+    local has_unseen_output = get_unseen_output_string(tab)
+    local user_title_prefix = get_user_title_prefix(tab)
+
+    -- if neither working dir or foreground process are known, then this
+    -- instance was started by wezterm ssh. wezterm by default sets title
+    -- to "wezterm" and gives up on trying to differentiate multiple tabs
+    if active_working_dir == '' and active_fg_process == '' then
+        active_working_dir = "ssh session"
+    end
+
+    local title = string.format(
+        "%s%s%s : %s",
+        has_unseen_output,
+        user_title_prefix,
+        basename(active_working_dir),
+        basename(active_fg_process)
+    )
+
+    -- don't bother if there's only one tab, which is hidden
+    -- horizontal splits will mess with calculations. Luckily, I generally
+    -- use tabs, split only occassionally, and never both at the same time
+    if #tabs > 1 and #panes == 1 then
+        local window_width = tab.active_pane.width
+        local new_tab_btn_width = 3
+        local per_tab_width = (window_width - new_tab_btn_width) / #tabs
+        -- this effectively centers the string
+        title = wezterm.pad_left(title, (per_tab_width + #title) / 2)
+        title = wezterm.pad_right(title, per_tab_width)
+    end
+    return {
+        { Text = title },
+    }
+end)
+
+wezterm.on('save-scrollback-to-file', function(window, pane)
+    -- Retrieve the text from the pane
+    local text = pane:get_lines_as_text(pane:get_dimensions().scrollback_rows)
+
+    -- Create a temporary file to pass to vim
+    local timestamp = os.date("%Y-%m-%dT%H-%M-%S")
+    local winid = window:window_id()
+    local paneid = pane:pane_id()
+    local fname = string.format("/tmp/wezterm_%s_win%s_pan%s.log", timestamp, winid, paneid)
+    local f = io.open(fname, 'w+')
+    f:write(text)
+    f:flush()
+    f:close()
+end)
+
+wezterm.on("spawn-new-maximized-window", function()
+    local tab, pane, window = wezterm.mux.spawn_window({})
+    window:gui_window():maximize()
+end)
+--}}}
+
+return config
