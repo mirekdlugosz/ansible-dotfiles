@@ -92,6 +92,11 @@ config.keys = {
       mods = 'SHIFT | CTRL',
       action = wezterm.action.ActivateCopyMode,
     },
+    {
+        key = 'W',
+        mods = 'SHIFT | CTRL',
+        action = wezterm.action.PaneSelect 
+    },
 }
 ---}}}
 
