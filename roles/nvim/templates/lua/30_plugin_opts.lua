@@ -42,6 +42,8 @@ if status_ok then
                 -- bg in source is `U.darken(C.sky, 0.30, C.base)`
                 CurSearch = { fg = colors.text, bg = "#3e5767" },
                 Folded = { bg = colors.none },
+                SpellBad = { fg = colors.base, bg = colors.red },
+                SpellCap = { fg = colors.base, bg = colors.sapphire },
             }
         end,
     }
