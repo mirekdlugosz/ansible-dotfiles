@@ -9,6 +9,8 @@
       tags: ["shell", "shell_config"]
     - role: ack
       tags: ["ack"]
+    - role: ast-grep
+      tags: ["ast-grep"]
     - role: bat
       tags: ["bat"]
     - role: direnv

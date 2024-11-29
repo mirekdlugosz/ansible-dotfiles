@@ -1,4 +1,5 @@
 ack_perform_install: no
+ast_grep_perform_install: no
 bat_perform_install: no
 fd_perform_install: no
 pipx_perform_install: no
