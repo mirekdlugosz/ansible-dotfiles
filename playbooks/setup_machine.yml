@@ -1,5 +1,8 @@
 - name: Set up development environment
   hosts: all
+  module_defaults:
+    ansible.builtin.setup:
+      gather_subset: '!network'
   environment:
     PATH: "{{ path_local_bin }}:{{ ansible_env.PATH }}"
   roles:
