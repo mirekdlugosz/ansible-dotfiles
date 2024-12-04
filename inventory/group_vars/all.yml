@@ -111,11 +111,11 @@ pyenv_local_path: "{{ ansible_env.HOME }}/.pyenv"
 pyenv_git_repo: "https://github.com/pyenv/pyenv.git"
 pyenv_wrapper_script: "{{ pyenv_local_path }}/.ansible_pyenv_wrapper"
 pyenv_versions:
-  - 3.9.20
-  - 3.10.15
-  - 3.11.10
-  - 3.12.7
-  - 3.13.0
+  - 3.9.21
+  - 3.10.16
+  - 3.11.11
+  - 3.12.8
+  - 3.13.1
 # }}}
 # {{{ R
 r_local_lib: "{{ ansible_env.HOME }}/.local/lib/R"
