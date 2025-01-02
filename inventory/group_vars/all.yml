@@ -51,7 +51,6 @@ lazygit_archive: "lazygit_{{ lazygit_version }}_Linux_x86_64.tar.gz"
 lazygit_archive_url: "https://github.com/jesseduffield/lazygit/releases/download/{{ lazygit_vversion }}/{{ lazygit_archive }}"
 # }}}
 # {{{ npm
-path_npm_global: "{{ ansible_env.HOME }}/.npm-global"
 # }}}
 # {{{ nvim
 nvim_dir: "{{ path_local_config }}/nvim/"

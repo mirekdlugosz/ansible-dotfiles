@@ -13,7 +13,6 @@ shell_extra_vars:
 shell_extra_paths:
   - "{{ ansible_env.HOME }}/skrypty"
   - "{{ path_local_bin }}"
-  - "{{ path_npm_global }}/bin"
   - "{{ ansible_env.HOME }}/.cargo/bin"
 
 shell_extra_configs:
