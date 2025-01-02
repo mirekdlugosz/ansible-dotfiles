@@ -63,7 +63,6 @@ nvim_treesitter_modules:
   - "html"
   - "javascript"
   - "json"
-  - "latex"
   - "lua"
   - "markdown"
   - "markdown_inline"
