@@ -14,7 +14,7 @@ ast_grep_archive: "app-x86_64-unknown-linux-gnu.zip"
 ast_grep_archive_url: "https://github.com/ast-grep/ast-grep/releases/download/{{ ast_grep_version }}/{{ ast_grep_archive }}"
 # }}}
 # {{{ bat
-bat_version: "0.24.0"
+bat_version: "0.25.0"
 bat_vversion: "v{{ bat_version }}"
 bat_archive: "bat-{{ bat_vversion }}-x86_64-unknown-linux-gnu.tar.gz"
 bat_archive_url: "https://github.com/sharkdp/bat/releases/download/{{ bat_vversion }}/{{ bat_archive }}"
