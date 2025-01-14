@@ -17,6 +17,18 @@ config.window_padding = {
     top = '0',
     bottom = '0',
 }
+
+custom_hyperlink_rules = wezterm.default_hyperlink_rules()
+mailto_entry = -1
+for k, v in pairs(custom_hyperlink_rules) do
+    if v['format']:sub(1, 7) == 'mailto:' then
+        mailto_entry = k
+    end
+end
+if mailto_entry ~= -1 then
+    table.remove(custom_hyperlink_rules, mailto_entry)
+end
+config.hyperlink_rules = custom_hyperlink_rules
 --}}}
 
 --{{{ colors and fonts
