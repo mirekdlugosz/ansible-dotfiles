@@ -9,7 +9,7 @@ ack_git_repo: "https://github.com/beyondgrep/ack3.git"
 ack_version: "v3.8.1"
 # }}}
 # {{{ ast-grep
-ast_grep_version: "0.33.1"
+ast_grep_version: "0.34.1"
 ast_grep_archive: "app-x86_64-unknown-linux-gnu.zip"
 ast_grep_archive_url: "https://github.com/ast-grep/ast-grep/releases/download/{{ ast_grep_version }}/{{ ast_grep_archive }}"
 # }}}
