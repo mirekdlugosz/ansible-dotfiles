@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+
+import subprocess
+import sys
+from dataclasses import dataclass
+from enum import Enum, auto
+
+
+class RemoteType(Enum):
+    GITHUB = auto()
+    GITLAB = auto()
+
+
+@dataclass(frozen=True)
+class RemoteInfo:
+    origin_name: str
+    main_branch_name: str
+    remote_type: RemoteType
+
+
+class UnknownOriginNameException(Exception):
+    pass
+
+
+def run_git_command(command: list[str], allow_fail=False) -> list[str]:
+    result = subprocess.run(["git", *command], capture_output=True, text=True)
+    if not allow_fail and result.returncode != 0:
+        cmd = " ".join(command)
+        print(f"Error running command: git {cmd}\n{result.stdout}\n{result.stderr}")
+        sys.exit(result.returncode)
+    return result.stdout.strip().splitlines()
+
+
+def get_origin_name(remote_out: list[str]) -> str | None:
+    for origin_candidate in ("upstream", "origin"):
+        if origin_candidate in remote_out:
+            return origin_candidate
+
+
+def get_remote_info() -> RemoteInfo:
+    output = run_git_command(["remote", "show"])
+    if not (origin_name := get_origin_name(output)):
+        raise UnknownOriginNameException
+    output = run_git_command(["remote", "show", origin_name])
+
+    remote_type = RemoteType.GITLAB
+    branch_name = "main"
+
+    for line in output:
+        if "fetch url" in line.lower():
+            if "github.com" in line:
+                remote_type = RemoteType.GITHUB
+        if "head branch" in line.lower():
+            _, _, branch_name = line.partition(":")
+            branch_name = branch_name.strip()
+    return RemoteInfo(
+        origin_name=origin_name,
+        main_branch_name=branch_name,
+        remote_type=remote_type,
+    )
+
+
+def get_remote_pr_branch(remote_info: RemoteInfo, pr_number: str) -> str:
+    match remote_info.remote_type:
+        case RemoteType.GITHUB:
+            return f"pull/{pr_number}/head"
+        case RemoteType.GITLAB:
+            return f"merge-requests/{pr_number}/head"
+
+
+def main():
+    try:
+        pr_number = sys.argv[1]
+    except IndexError:
+        print("Pass PR number as only argument to the script")
+        sys.exit(1)
+
+    try:
+        remote_info = get_remote_info()
+    except UnknownOriginNameException:
+        print("There's no origin named 'upstream' or 'origin', you are on your own")
+        sys.exit(1)
+
+    local_pr_branch_name = f"pr-{pr_number}"
+    remote_pr_branch_name = get_remote_pr_branch(remote_info, pr_number)
+
+    run_git_command(["checkout", remote_info.main_branch_name])
+    run_git_command(["branch", "-D", local_pr_branch_name], allow_fail=True)
+    run_git_command(
+        ["fetch", remote_info.origin_name, f"{remote_pr_branch_name}:{local_pr_branch_name}"]
+    )
+    run_git_command(["checkout", local_pr_branch_name])
+
+
+if __name__ == "__main__":
+    main()

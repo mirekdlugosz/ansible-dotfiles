@@ -27,25 +27,33 @@
 [diff]
     noprefix = true
     algorithm = histogram
+    colorMoved = plain
 [pull]
     ff = only
 [branch]
-	sort = -authordate
+    sort = -authordate
 [gpg]
-	format = ssh
+    format = ssh
 [commit]
-	gpgsign = true
+    gpgsign = true
+    verbose = true
 [tag]
-	gpgsign = true
-	sort = taggerdate
+    gpgsign = true
+    sort = taggerdate
 [gpg "ssh"]
-	defaultKeyCommand = git-ssh-sign-helper
-	allowedSignersFile = {{ ansible_env.HOME }}/.gitallowed-signers
+    defaultKeyCommand = git-ssh-sign-helper
+    allowedSignersFile = {{ ansible_env.HOME }}/.gitallowed-signers
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [rerere]
-	enabled = true
+    enabled = true
+    autoupdate = true
 [fetch]
-	prune = true
+    prune = true
+    pruneTags = true
 [log]
-	date = iso
+    date = iso
+[rebase]
+    updateRefs = true
+[grep]
+    patternType = perl
