@@ -71,7 +71,8 @@ def get_remote_pr_branch(remote_info: RemoteInfo, pr_number: str) -> str:
 def main():
     try:
         pr_number = sys.argv[1]
-    except IndexError:
+        int(pr_number)
+    except (IndexError, ValueError):
         print("Pass PR number as only argument to the script")
         sys.exit(1)
 
