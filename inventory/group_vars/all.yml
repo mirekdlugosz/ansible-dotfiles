@@ -104,6 +104,7 @@ pipx_packages:
   nox: "2025.2.9"
   poetry: "2.1.1"
   reuse: "*"
+  uv: "*"
 # }}}
 # {{{ pyenv
 pyenv_local_path: "{{ ansible_env.HOME }}/.pyenv"
