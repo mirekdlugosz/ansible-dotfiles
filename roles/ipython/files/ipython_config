@@ -1,3 +1,2 @@
 c.StoreMagics.autorestore = True
 c.TerminalInteractiveShell.confirm_exit = False
-c.TerminalInteractiveShell.highlighting_style = 'monokai'
