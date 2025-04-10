@@ -13,7 +13,7 @@ pipx_packages:
   jedi-language-server: "*"
   neovim-remote: "*"
   nox: "2025.2.9"
-  poetry: "1.8.5"
+  poetry: "2.1.2"
   python-openstackclient: "*"
   reuse: "*"
   uv: "*"
