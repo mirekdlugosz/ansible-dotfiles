@@ -101,7 +101,7 @@ pipx_packages:
   git-filter-repo: "*"
   jedi-language-server: "*"
   neovim-remote: "*"
-  nox: "2025.2.9"
+  nox: "2025.5.1"
   poetry: "2.1.2"
   reuse: "*"
   uv: "0.6.17"
