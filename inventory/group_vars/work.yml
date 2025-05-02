@@ -16,7 +16,7 @@ pipx_packages:
   poetry: "2.1.2"
   python-openstackclient: "*"
   reuse: "*"
-  uv: "*"
+  uv: "0.6.17"
 
 shell_extra_vars:
   BROWSER: "/usr/bin/google-chrome"
