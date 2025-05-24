@@ -105,6 +105,9 @@ pipx_packages:
   poetry: "2.1.3"
   reuse: "*"
   uv: "0.6.17"
+  # vmmgr is not on PyPI and our current pipx role can't handle installing packages from local source
+  # just install it manually before running playbook, and as long as version matches, ansible will leave it alone
+  vmmgr: "0.1.0"
 # }}}
 # {{{ pyenv
 pyenv_local_path: "{{ ansible_env.HOME }}/.pyenv"

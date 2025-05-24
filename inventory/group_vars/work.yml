@@ -17,10 +17,12 @@ pipx_packages:
   python-openstackclient: "*"
   reuse: "*"
   uv: "0.6.17"
+  vmmgr: "0.1.0"
 
 shell_extra_vars:
   BROWSER: "/usr/bin/google-chrome"
   VAGRANT_DEFAULT_PROVIDER: "libvirt"
+  VMMGR_TEMPLATE_IMAGES_POOLS: "VirtualMachines"
 
 shell_extra_paths:
   - "{{ path_local_bin }}"
