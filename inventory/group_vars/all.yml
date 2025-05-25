@@ -30,7 +30,7 @@ fd_archive: "fd-{{ fd_vversion }}-x86_64-unknown-linux-gnu.tar.gz"
 fd_archive_url: "https://github.com/sharkdp/fd/releases/download/{{ fd_vversion }}/{{ fd_archive }}"
 # }}}
 # {{{ fx
-fx_version: "36.0.2"
+fx_version: "36.0.3"
 fx_binary: "fx_linux_amd64"
 fx_binary_url: "https://github.com/antonmedv/fx/releases/download/{{ fx_version }}/{{ fx_binary }}"
 # }}}
