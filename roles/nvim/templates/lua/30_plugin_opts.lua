@@ -121,6 +121,8 @@ vim.g.undotree_HighlightChangedWithSign = 0
 vim.g.tagbar_autoclose = 1
 vim.g.tagbar_autofocus = 1
 vim.g.tagbar_autoshowtag = 1
+vim.g.tagbar_position = "left"
+vim.g.tagbar_sort = 0
 -- >>>
 
 -- <<< nvim-telescope/telescope.nvim
