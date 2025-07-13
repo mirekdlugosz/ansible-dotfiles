@@ -1,7 +1,7 @@
-path_local_config: "{{ ansible_env.HOME }}/.config/"
-path_local_bin: "{{ ansible_env.HOME }}/.local/bin/"
-path_local_share: "{{ ansible_env.HOME }}/.local/share/"
-path_shell_config: "{{ path_local_config }}/shell/"
+path_local_config: "{{ ansible_env.HOME }}/.config"
+path_local_bin: "{{ ansible_env.HOME }}/.local/bin"
+path_local_share: "{{ ansible_env.HOME }}/.local/share"
+path_shell_config: "{{ path_local_config }}/shell"
 
 # {{{ custom roles defaults
 # {{{ ack
