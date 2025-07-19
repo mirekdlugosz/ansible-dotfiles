@@ -32,22 +32,15 @@
 - name: Get currently installed packages
   command: pipx list --short
   register: cmd_pipx_pkgs_installed
-  when: pipx_packages
-
-- name: Set up Ansible dictionary for currently installed packages
-  ansible.builtin.set_fact:
-    _pipx_packages_installed: {}
+  when: pipx_packages is truthy
 
 - name: Get currently installed packages as Ansible dictionary
   ansible.builtin.set_fact:
     _pipx_packages_installed: |
-      {{
-      _pipx_packages_installed
-      | combine(
-        dict([ item.partition(" ")[::2] ])
-      )
+      {{ cmd_pipx_pkgs_installed.stdout_lines | default([])
+         | map('split', ' ')
+         | community.general.dict
       }}
-  loop: "{{ cmd_pipx_pkgs_installed.stdout_lines | default([]) }}"
 
 - name: Remove packages in wrong versions
   command: pipx uninstall {{ item.key }}
