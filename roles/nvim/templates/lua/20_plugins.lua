@@ -59,8 +59,8 @@ require "paq" {
 
     -- LSP
     -- ready to use configs
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason.nvim",
+    { "mason-org/mason-lspconfig.nvim", branch = "v1.x" },
     "neovim/nvim-lspconfig",
 
     -- Use lua scripts to provide LSP features
