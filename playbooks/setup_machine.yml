@@ -12,7 +12,7 @@
       tags: ["shell", "shell_config"]
     - role: ack
       tags: ["ack"]
-    - role: ast-grep
+    - role: ast_grep
       tags: ["ast-grep"]
     - role: bat
       tags: ["bat"]
@@ -40,7 +40,7 @@
       tags: ["pyenv"]
     - role: ripgrep
       tags: ["ripgrep"]
-    - role: R
+    - role: r
       tags: ["R"]
     - role: rust
       tags: ["rust"]
@@ -54,5 +54,5 @@
       tags: ["wezterm", "shell_config"]
     - role: xh
       tags: ["xh", "shell_config"]
-    - role: z.lua
+    - role: z_lua
       tags: ["z.lua", "shell_config"]

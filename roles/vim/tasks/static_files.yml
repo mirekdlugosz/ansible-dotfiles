@@ -1,13 +1,15 @@
 - name: Prepare directories
-  file:
+  ansible.builtin.file:
     path: "{{ vim_dir }}/{{ item.path }}"
     state: directory
-  with_filetree: .
+    mode: "0775"
+  with_community.general.filetree: .
   when: item.state == 'directory'
 
 - name: Copy modular configuration files
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ vim_dir }}/{{ item.path }}"
-  with_filetree: .
+    mode: "0644"
+  with_community.general.filetree: .
   when: item.state == 'file'

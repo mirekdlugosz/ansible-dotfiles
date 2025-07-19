@@ -1,63 +1,67 @@
 - name: Will install pyenv
   ansible.builtin.set_fact:
-    pyenv_perform_install: True
+    pyenv_perform_install: true
   when:
     - pyenv_perform_install is undefined
 
 - name: Setup pyenv
+  when: pyenv_perform_install is defined and pyenv_perform_install
   block:
 
-  - name: Preparing pyenv directory
-    file:
-      path: "{{ pyenv_local_path }}"
-      state: directory
+    - name: Preparing pyenv directory
+      ansible.builtin.file:
+        path: "{{ pyenv_local_path }}"
+        state: directory
+        mode: "0775"
 
-  - name: Cloning pyenv
-    git:
-      repo: "{{ pyenv_git_repo }}"
-      dest: "{{ pyenv_local_path }}"
+    - name: Cloning pyenv
+      ansible.builtin.git: # noqa: latest
+        repo: "{{ pyenv_git_repo }}"
+        dest: "{{ pyenv_local_path }}"
 
-  - name: Create pyenv wrapper script
-    ansible.builtin.copy:
-      dest: "{{ pyenv_wrapper_script }}"
-      content: |
-        #!/bin/sh
-        if [ "${1}x" = '-cx'  ]; then
-          shift
-        fi
-        export PYENV_ROOT="{{ pyenv_local_path }}"
-        command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-        eval "$(pyenv init -)"
-        sh -c "$@"
-      mode: 0755
+    - name: Create pyenv wrapper script
+      ansible.builtin.copy:
+        dest: "{{ pyenv_wrapper_script }}"
+        content: |
+          #!/bin/sh
+          if [ "${1}x" = '-cx'  ]; then
+            shift
+          fi
+          export PYENV_ROOT="{{ pyenv_local_path }}"
+          command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+          eval "$(pyenv init -)"
+          sh -c "$@"
+        mode: "0755"
 
-  - name: Get pyenv versions
-    ansible.builtin.shell: >
-      pyenv versions
-      | sed -n -e '/[0-9]/{s/[ \*]*\([0-9\.]\+\).*/\1/;p}'
-    args:
-      executable: "{{ pyenv_wrapper_script }}"
-    register: local_pyenv_versions_result
+    - name: Get pyenv versions
+      ansible.builtin.shell: >
+        set -o pipefail ;
+        pyenv versions
+        | sed -n -e '/[0-9]/{s/[ \*]*\([0-9\.]\+\).*/\1/;p}'
+      args:
+        executable: "{{ pyenv_wrapper_script }}"
+      register: local_pyenv_versions_result
+      changed_when: false
 
-  - name: Install missing Python versions
-    ansible.builtin.shell: "pyenv install {{ item }}"
-    args:
-      executable: "{{ pyenv_wrapper_script }}"
-    loop: "{{ pyenv_versions }}"
-    when:
-      - item not in local_pyenv_versions_result.stdout_lines
+    - name: Install missing Python versions
+      ansible.builtin.shell: "pyenv install {{ item }}"
+      args:
+        executable: "{{ pyenv_wrapper_script }}"
+      loop: "{{ pyenv_versions }}"
+      when:
+        - item not in local_pyenv_versions_result.stdout_lines
+      changed_when: true
 
-  - name: Remove manually installed Python versions
-    ansible.builtin.shell: "pyenv uninstall -f {{ item }}"
-    args:
-      executable: "{{ pyenv_wrapper_script }}"
-    loop: "{{ local_pyenv_versions_result.stdout_lines | default([]) }}"
-    when:
-      - item not in pyenv_versions
+    - name: Remove manually installed Python versions
+      ansible.builtin.shell: "pyenv uninstall -f {{ item }}"
+      args:
+        executable: "{{ pyenv_wrapper_script }}"
+      loop: "{{ local_pyenv_versions_result.stdout_lines | default([]) }}"
+      when:
+        - item not in pyenv_versions
+      changed_when: true
 
-  - name: Remove pyenv wrapper script
-    ansible.builtin.file:
-      path: "{{ pyenv_wrapper_script }}"
-      state: absent
-
-  when: pyenv_perform_install is defined and pyenv_perform_install
+    - name: Remove pyenv wrapper script
+      ansible.builtin.file:
+        path: "{{ pyenv_wrapper_script }}"
+        state: absent

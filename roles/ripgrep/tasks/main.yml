@@ -1,2 +1,5 @@
 - name: Copy ripgreprc file
-  copy: src=_ripgreprc dest=~/.ripgreprc
+  ansible.builtin.copy:
+    src: _ripgreprc
+    dest: ~/.ripgreprc
+    mode: "0664"

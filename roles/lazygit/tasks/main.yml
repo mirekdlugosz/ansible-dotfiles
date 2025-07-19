@@ -1,64 +1,69 @@
 - name: Checking if lazygit is available
-  command: lazygit --version
+  ansible.builtin.command: lazygit --version
   register: cmd_lazygit_installed
-  ignore_errors: True
+  ignore_errors: true
   when: lazygit_perform_install is undefined
+  changed_when: false
 
 - name: Checking lazygit version
-  shell: "lazygit --version | awk -F '[,=]' 'NR==1 {print $8}'"
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      lazygit --version | awk -F '[,=]' 'NR==1 {print $8}'
   register: cmd_lazygit_version
   when:
     - lazygit_perform_install is undefined
     - cmd_lazygit_installed.rc == 0
+  changed_when: false
 
-- set_fact:
-    lazygit_perform_install: True
+- name: Set lazygit_perform_install fact
+  ansible.builtin.set_fact:
+    lazygit_perform_install: true
   when:
     - lazygit_perform_install is undefined
     - cmd_lazygit_installed.rc != 0 or cmd_lazygit_version.stdout != lazygit_version
 
-- name: Preparing tmp directory
-  tempfile:
-    state: directory
-    suffix: lazygit
-  register: lazygit_tmp_dir
+- name: Set up lazygit
   when: lazygit_perform_install is defined and lazygit_perform_install
+  block:
 
-- name: Downloading lazygit archive
-  get_url:
-    url: "{{ lazygit_archive_url }}"
-    dest: "{{ lazygit_tmp_dir.path }}/{{ lazygit_archive }}"
-  when: lazygit_perform_install is defined and lazygit_perform_install
+    - name: Preparing tmp directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: lazygit
+      register: lazygit_tmp_dir
 
-- name: Extracting lazygit archive
-  unarchive:
-    src: "{{ lazygit_tmp_dir.path }}/{{ lazygit_archive }}"
-    dest: "{{ lazygit_tmp_dir.path }}"
-    remote_src: yes
-  when: lazygit_perform_install is defined and lazygit_perform_install
+    - name: Downloading lazygit archive
+      ansible.builtin.get_url:
+        url: "{{ lazygit_archive_url }}"
+        dest: "{{ lazygit_tmp_dir.path }}/{{ lazygit_archive }}"
+        mode: "0644"
 
-- name: Find extracted lazygit executable
-  find:
-    paths: "{{ lazygit_tmp_dir.path }}"
-    patterns: "^lazygit$"
-    recurse: yes
-    use_regex: yes
-  register: lazygit_find_results
-  when: lazygit_perform_install is defined and lazygit_perform_install
+    - name: Extracting lazygit archive
+      ansible.builtin.unarchive:
+        src: "{{ lazygit_tmp_dir.path }}/{{ lazygit_archive }}"
+        dest: "{{ lazygit_tmp_dir.path }}"
+        remote_src: true
 
-- name: Installing lazygit
-  command: "cp {{ item.path }} {{ path_local_bin }}/lazygit"
-  with_items: "{{ lazygit_find_results.files }}"
-  when: lazygit_perform_install is defined and lazygit_perform_install
+    - name: Find extracted lazygit executable
+      ansible.builtin.find:
+        paths: "{{ lazygit_tmp_dir.path }}"
+        patterns: "^lazygit$"
+        recurse: true
+        use_regex: true
+      register: lazygit_find_results
 
-- name: Ensuring correct executable permissions
-  file:
-    path: "{{ path_local_bin }}/lazygit"
-    mode: "0775"
-  when: lazygit_perform_install is defined and lazygit_perform_install
+    - name: Installing lazygit
+      ansible.builtin.command: "cp {{ item.path }} {{ path_local_bin }}/lazygit"
+      with_items: "{{ lazygit_find_results.files }}"
+      changed_when: true
 
-- name: Clean up build directory
-  file:
-    path: "{{ lazygit_tmp_dir.path }}"
-    state: absent
-  when: lazygit_perform_install is defined and lazygit_perform_install
+    - name: Ensuring correct executable permissions
+      ansible.builtin.file:
+        path: "{{ path_local_bin }}/lazygit"
+        mode: "0775"
+
+    - name: Clean up build directory
+      ansible.builtin.file:
+        path: "{{ lazygit_tmp_dir.path }}"
+        state: absent

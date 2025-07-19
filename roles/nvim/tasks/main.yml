@@ -1,7 +1,8 @@
 - name: "Prepare nvim directories"
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: "directory"
+    mode: "0775"
   loop:
     - "{{ nvim_dir }}"
     - "{{ nvim_dir }}/ftplugin/"
@@ -10,16 +11,18 @@
     - "{{ nvim_share_dir }}/site/pack/paqs/start/paq-nvim/"
 
 - name: "Copy static modular configuration files"
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ nvim_dir }}/{{ item.path }}"
-  with_filetree: .
+    mode: "0644"
+  with_community.general.filetree: .
   when: item.state == 'file'
 
 - name: "Generate modular configuration files"
-  template:
+  ansible.builtin.template:
     src: "{{ item }}"
     dest: "{{ nvim_dir }}/{{ item }}"
+    mode: "0644"
   loop:
     - "lua/10_opts.lua"
     - "lua/20_plugins.lua"
@@ -28,17 +31,22 @@
     - "init.lua"
 
 - name: "Clone packer (plugin management tool)"
-  git:
+  ansible.builtin.git: # noqa: latest
     repo: "{{ paq_git_repo }}"
     dest: "{{ nvim_share_dir }}/site/pack/paqs/start/paq-nvim/"
     depth: "1"
 
 - name: "Install plugins"
-  command: >
+  ansible.builtin.command: >
     nvim --headless -c 'autocmd User PaqDoneSync quitall' -c 'PaqSync'
+  register: _paq_sync
+  failed_when:
+    - "'0 errors' not in _paq_sync.stderr"
+  changed_when:
+    - "'0 ok' not in _paq_sync.stderr"
 
 - name: "Install treesitter modules"
-  command: >
+  ansible.builtin.command: >
     nvim --headless -c 'TSUpdateSync' -c 'qa'
   register: _ts_update
   failed_when:
@@ -48,15 +56,15 @@
     - _ts_update.stderr != "All parsers are up-to-date!"
 
 - name: "Check installed LSP servers"
-  command: >
+  ansible.builtin.command: >
     nvim --headless
     -c 'lua vim.print(vim.json.encode(require("mason-lspconfig").get_installed_servers()))'
     -c 'qa'
   register: _installed_lsp_servers
-  changed_when: False
+  changed_when: false
 
 - name: "Create list of LSP servers to install"
-  set_fact:
+  ansible.builtin.set_fact:
     _missing_lsp_servers: >
       {{
         (nvim_lsps | difference(_installed_lsp_servers.stderr_lines[-1] | from_json))
@@ -64,6 +72,7 @@
       }}
 
 - name: "Install LSP servers"
-  command: >
+  ansible.builtin.command: >
       nvim --headless -c 'LspInstall {{ _missing_lsp_servers | join(" ") }}' -c 'qa'
   when: (_missing_lsp_servers | length) >= 1
+  changed_when: true

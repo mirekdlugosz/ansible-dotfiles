@@ -1,2 +1,5 @@
 - name: Copy tmux configuration file
-  template: src=_tmux.conf dest=~/.tmux.conf
+  ansible.builtin.template:
+    src: _tmux.conf
+    dest: ~/.tmux.conf
+    mode: "0664"

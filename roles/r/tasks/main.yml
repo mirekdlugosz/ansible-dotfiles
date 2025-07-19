@@ -1,7 +1,8 @@
 - name: Copy config files
-  template:
+  ansible.builtin.template:
     src: "{{ item }}"
     dest: "~/{{ item | replace('_', '.', 1) }}"
+    mode: '0644'
   loop:
     - _littler.r
     - _Renviron

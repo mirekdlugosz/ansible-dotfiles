@@ -1,18 +1,18 @@
-ack_perform_install: no
-ast_grep_perform_install: no
-bat_perform_install: no
-fd_perform_install: no
-pipx_perform_install: no
+ack_perform_install: false
+ast_grep_perform_install: false
+bat_perform_install: false
+fd_perform_install: false
+pipx_perform_install: false
 pipx_packages: {}
-pyenv_perform_install: no
-rust_perform_install: no
+pyenv_perform_install: false
+rust_perform_install: false
 lua_binary: lua53
 path_target_node_binary: "/usr/local/bin/node18"
 lazygit_archive: "lazygit_{{ lazygit_version }}_freebsd_x86_64.tar.gz"
-starship_perform_install: no
+starship_perform_install: false
 starship_archive: "starship-x86_64-unknown-freebsd.tar.gz"
 tmux_default_terminal: "xterm-256color"
-xh_perform_install: no
+xh_perform_install: false
 
 shell_extra_vars:
   LANG: "pl_PL.UTF-8"

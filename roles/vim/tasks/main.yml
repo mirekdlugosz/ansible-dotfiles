@@ -1,14 +1,18 @@
-- import_tasks: static_files.yml
+- name: Import static_files task
+  ansible.builtin.import_tasks: static_files.yml
 
-- import_tasks: git_vim_plug.yml
+- name: Import git_vim_plug task
+  ansible.builtin.import_tasks: git_vim_plug.yml
 
 - name: Installing vim plugins
-  command: "vim {{item}} +qall"
+  ansible.builtin.command: "vim {{ item }} +qall"
   loop:
     - "+PlugInstall"
     - "+PlugClean!"
     - "+PlugUpdate"
   when: vim_install_plugins is defined and vim_install_plugins
+  changed_when: true
 
-- import_tasks: coc_plugins.yml
+- name: Import coc_plugins task
+  ansible.builtin.import_tasks: coc_plugins.yml
   when: vim_coc_extensions != ""

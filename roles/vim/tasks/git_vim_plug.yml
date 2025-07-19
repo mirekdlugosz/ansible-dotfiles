@@ -1,24 +1,26 @@
 - name: Ensuring vim autoload directory exists
-  file:
+  ansible.builtin.file:
     path: "{{ vim_dir }}/autoload"
     state: directory
+    mode: "0775"
 
 - name: Preparing directory for vim-plug git
-  tempfile:
+  ansible.builtin.tempfile:
     state: directory
     suffix: vimplug
   register: vimplug_git_dir
 
 - name: Cloning vimplug
-  git:
+  ansible.builtin.git: # noqa: latest
     repo: "{{ vimplug_git_repo }}"
     dest: "{{ vimplug_git_dir.path }}"
     depth: "1"
 
 - name: Installing vimplug
-  command: "cp {{ vimplug_git_dir.path }}/plug.vim {{ vim_dir }}/autoload/plug.vim"
+  ansible.builtin.command: "cp {{ vimplug_git_dir.path }}/plug.vim {{ vim_dir }}/autoload/plug.vim"
+  changed_when: true
 
 - name: Clean up git directory
-  file:
+  ansible.builtin.file:
     path: "{{ vimplug_git_dir.path }}"
     state: absent

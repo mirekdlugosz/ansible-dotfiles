@@ -1,0 +1,26 @@
+- name: Set zlua_perform_install fact
+  ansible.builtin.set_fact:
+    zlua_perform_install: true
+  when:
+    - zlua_perform_install is undefined
+
+- name: Set up z.lua
+  when: zlua_perform_install is defined and zlua_perform_install
+  block:
+
+    - name: Preparing z.lua directory
+      ansible.builtin.file:
+        path: "{{ zlua_local_path }}"
+        state: directory
+        mode: "0775"
+
+    - name: Cloning z.lua
+      ansible.builtin.git: # noqa: latest
+        repo: "{{ zlua_git_repo }}"
+        dest: "{{ zlua_local_path }}"
+
+    - name: Copying shell file
+      ansible.builtin.template:
+        src: zlua.bash
+        dest: "{{ path_shell_config }}/zlua.bash"
+        mode: "0664"

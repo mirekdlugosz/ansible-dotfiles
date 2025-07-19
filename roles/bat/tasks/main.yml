@@ -1,18 +1,24 @@
 - name: Checking if bat is available
-  command: bat --version
+  ansible.builtin.command: bat --version
   register: cmd_bat_installed
-  ignore_errors: True
+  ignore_errors: true
   when: bat_perform_install is undefined
+  changed_when: false
 
 - name: Checking bat version
-  shell: "bat --version | awk 'NR==1 {print $2}'"
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      bat --version | awk 'NR==1 {print $2}'
   register: cmd_bat_version
   when:
     - bat_perform_install is undefined
     - cmd_bat_installed.rc == 0
+  changed_when: false
 
-- set_fact:
-    bat_perform_install: True
+- name: Set bat_perform_install fact
+  ansible.builtin.set_fact:
+    bat_perform_install: true
   when:
     - bat_perform_install is undefined
     - cmd_bat_installed.rc != 0 or cmd_bat_version.stdout != bat_version
@@ -21,87 +27,93 @@
   when: bat_perform_install is defined and bat_perform_install
   block:
 
-  - name: Preparing tmp directory
-    tempfile:
-      state: directory
-      suffix: bat
-    register: bat_tmp_dir
+    - name: Preparing tmp directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: bat
+      register: bat_tmp_dir
 
-  - name: Downloading bat archive
-    get_url:
-      url: "{{ bat_archive_url }}"
-      dest: "{{ bat_tmp_dir.path }}/{{ bat_archive }}"
+    - name: Downloading bat archive
+      ansible.builtin.get_url:
+        url: "{{ bat_archive_url }}"
+        dest: "{{ bat_tmp_dir.path }}/{{ bat_archive }}"
+        mode: "0644"
 
-  - name: Extracting bat archive
-    unarchive:
-      src: "{{ bat_tmp_dir.path }}/{{ bat_archive }}"
-      dest: "{{ bat_tmp_dir.path }}"
-      remote_src: yes
+    - name: Extracting bat archive
+      ansible.builtin.unarchive:
+        src: "{{ bat_tmp_dir.path }}/{{ bat_archive }}"
+        dest: "{{ bat_tmp_dir.path }}"
+        remote_src: true
 
-  - name: Find extracted bat executable
-    find:
-      paths: "{{ bat_tmp_dir.path }}"
-      patterns: "^bat$"
-      recurse: yes
-      use_regex: yes
-    register: bat_find_results
+    - name: Find extracted bat executable
+      ansible.builtin.find:
+        paths: "{{ bat_tmp_dir.path }}"
+        patterns: "^bat$"
+        recurse: true
+        use_regex: true
+      register: bat_find_results
 
-  - name: Installing bat
-    command: "cp {{ item.path }} {{ path_local_bin }}/bat"
-    with_items: "{{ bat_find_results.files }}"
+    - name: Installing bat
+      ansible.builtin.command: "cp {{ item.path }} {{ path_local_bin }}/bat"
+      with_items: "{{ bat_find_results.files }}"
+      changed_when: true
 
-  - name: Ensuring correct executable permissions
-    file:
-      path: "{{ path_local_bin }}/bat"
-      mode: "0775"
+    - name: Ensuring correct executable permissions
+      ansible.builtin.file:
+        path: "{{ path_local_bin }}/bat"
+        mode: "0775"
 
-  - name: Creating 'cat' -> 'bat' link in local bin directory
-    file:
-      src: "{{ path_local_bin }}/bat"
-      dest: "{{ path_local_bin }}/cat"
-      state: link
+    - name: Creating 'cat' -> 'bat' link in local bin directory
+      ansible.builtin.file:
+        src: "{{ path_local_bin }}/bat"
+        dest: "{{ path_local_bin }}/cat"
+        state: link
 
-  - name: Obtain path to bat config directory
-    command: "{{ path_local_bin }}/bat --config-dir"
-    register: cmd_bat_config_dir
+    - name: Obtain path to bat config directory
+      ansible.builtin.command: "{{ path_local_bin }}/bat --config-dir"
+      register: cmd_bat_config_dir
+      changed_when: false
 
-  - set_fact:
-      bat_config_theme_dir: "{{ cmd_bat_config_dir.stdout }}/themes/"
+    - name: Set bat_config_theme_dir fact
+      ansible.builtin.set_fact:
+        bat_config_theme_dir: "{{ cmd_bat_config_dir.stdout }}/themes/"
 
-  - name: Creating bat themes configuration directory
-    file:
-      dest: "{{ bat_config_theme_dir }}"
-      state: directory
+    - name: Creating bat themes configuration directory
+      ansible.builtin.file:
+        dest: "{{ bat_config_theme_dir }}"
+        state: directory
+        mode: "0775"
 
-  - name: Preparing directory for catppuccin bat theme git
-    tempfile:
-      state: directory
-      suffix: catbat
-    register: catppuccin_bat_git_dir
+    - name: Preparing directory for catppuccin bat theme git
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: catbat
+      register: catppuccin_bat_git_dir
 
-  - name: Cloning catppuccin bat theme
-    git:
-      repo: "{{ catppuccin_bat_theme_git_repo }}"
-      dest: "{{ catppuccin_bat_git_dir.path }}"
-      depth: "1"
+    - name: Cloning catppuccin bat theme
+      ansible.builtin.git: # noqa: latest
+        repo: "{{ catppuccin_bat_theme_git_repo }}"
+        dest: "{{ catppuccin_bat_git_dir.path }}"
+        depth: "1"
 
-  - name: Copy catppuccin bat theme files
-    ansible.builtin.copy:
-      src: "{{ item }}"
-      dest: "{{ bat_config_theme_dir }}"
-    with_fileglob:
-      - "{{ catppuccin_bat_git_dir.path }}/themes/*.tmTheme"
+    - name: Copy catppuccin bat theme files
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ bat_config_theme_dir }}"
+        mode: "0644"
+      with_fileglob:
+        - "{{ catppuccin_bat_git_dir.path }}/themes/*.tmTheme"
 
-  - name: Rebuilding bat cache
-    command: "{{ path_local_bin }}/bat cache --build"
+    - name: Rebuilding bat cache
+      ansible.builtin.command: "{{ path_local_bin }}/bat cache --build"
+      changed_when: false
 
-  - name: Clean up build directory
-    file:
-      path: "{{ bat_tmp_dir.path }}"
-      state: absent
+    - name: Clean up build directory
+      ansible.builtin.file:
+        path: "{{ bat_tmp_dir.path }}"
+        state: absent
 
-  - name: Clean up catppuccin bat theme directory
-    file:
-      path: "{{ catppuccin_bat_git_dir.path }}"
-      state: absent
-
+    - name: Clean up catppuccin bat theme directory
+      ansible.builtin.file:
+        path: "{{ catppuccin_bat_git_dir.path }}"
+        state: absent

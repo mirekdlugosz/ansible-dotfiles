@@ -1,6 +1,12 @@
 - name: Copy .npmrc file
-  template: src=_npmrc dest=~/.npmrc
+  ansible.builtin.template:
+    src: _npmrc
+    dest: ~/.npmrc
+    mode: "0664"
 
 - name: Creating node symbolic link
-  file: path={{ path_local_bin }}/node src={{ path_target_node_binary }} state=link
+  ansible.builtin.file:
+    path: "{{ path_local_bin }}/node"
+    src: "{{ path_target_node_binary }}"
+    state: link
   when: path_target_node_binary is defined

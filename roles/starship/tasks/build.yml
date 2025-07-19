@@ -1,64 +1,69 @@
 - name: Checking if starship is available
-  command: starship --version
+  ansible.builtin.command: starship --version
   register: cmd_starship_installed
-  ignore_errors: True
+  ignore_errors: true
   when: starship_perform_install is undefined
+  changed_when: false
 
 - name: Checking starship version
-  shell: "starship --version | awk 'NR==1 {print $2}'"
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      starship --version | awk 'NR==1 {print $2}'
   register: cmd_starship_version
   when:
     - starship_perform_install is undefined
     - cmd_starship_installed.rc == 0
+  changed_when: false
 
-- set_fact:
-    starship_perform_install: True
+- name: Set starship_perform_install fact
+  ansible.builtin.set_fact:
+    starship_perform_install: true
   when:
     - starship_perform_install is undefined
     - cmd_starship_installed.rc != 0 or cmd_starship_version.stdout != starship_version
 
-- name: Preparing tmp directory
-  tempfile:
-    state: directory
-    suffix: starship
-  register: starship_tmp_dir
+- name: Set up starship
   when: starship_perform_install is defined and starship_perform_install
+  block:
 
-- name: Downloading starship archive
-  get_url:
-    url: "{{ starship_archive_url }}"
-    dest: "{{ starship_tmp_dir.path }}/{{ starship_archive }}"
-  when: starship_perform_install is defined and starship_perform_install
+    - name: Preparing tmp directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: starship
+      register: starship_tmp_dir
 
-- name: Extracting starship archive
-  unarchive:
-    src: "{{ starship_tmp_dir.path }}/{{ starship_archive }}"
-    dest: "{{ starship_tmp_dir.path }}"
-    remote_src: yes
-  when: starship_perform_install is defined and starship_perform_install
+    - name: Downloading starship archive
+      ansible.builtin.get_url:
+        url: "{{ starship_archive_url }}"
+        dest: "{{ starship_tmp_dir.path }}/{{ starship_archive }}"
+        mode: "0644"
 
-- name: Find extracted starship executable
-  find:
-    paths: "{{ starship_tmp_dir.path }}"
-    patterns: "^starship$"
-    recurse: yes
-    use_regex: yes
-  register: starship_find_results
-  when: starship_perform_install is defined and starship_perform_install
+    - name: Extracting starship archive
+      ansible.builtin.unarchive:
+        src: "{{ starship_tmp_dir.path }}/{{ starship_archive }}"
+        dest: "{{ starship_tmp_dir.path }}"
+        remote_src: true
 
-- name: Installing starship
-  command: "cp {{ item.path }} {{ path_local_bin }}/starship"
-  with_items: "{{ starship_find_results.files }}"
-  when: starship_perform_install is defined and starship_perform_install
+    - name: Find extracted starship executable
+      ansible.builtin.find:
+        paths: "{{ starship_tmp_dir.path }}"
+        patterns: "^starship$"
+        recurse: true
+        use_regex: true
+      register: starship_find_results
 
-- name: Ensuring correct executable permissions
-  file:
-    path: "{{ path_local_bin }}/starship"
-    mode: "0775"
-  when: starship_perform_install is defined and starship_perform_install
+    - name: Installing starship
+      ansible.builtin.command: "cp {{ item.path }} {{ path_local_bin }}/starship"
+      with_items: "{{ starship_find_results.files }}"
+      changed_when: true
 
-- name: Clean up build directory
-  file:
-    path: "{{ starship_tmp_dir.path }}"
-    state: absent
-  when: starship_perform_install is defined and starship_perform_install
+    - name: Ensuring correct executable permissions
+      ansible.builtin.file:
+        path: "{{ path_local_bin }}/starship"
+        mode: "0775"
+
+    - name: Clean up build directory
+      ansible.builtin.file:
+        path: "{{ starship_tmp_dir.path }}"
+        state: absent

@@ -1,10 +1,11 @@
 - name: Create target directory
-  file:
+  ansible.builtin.file:
     path: "{{ path_local_config }}/wezterm"
     state: directory
-    mode: 0755
+    mode: "0755"
 
 - name: Copy default wezterm configuration file
-  copy:
+  ansible.builtin.copy:
     src: wezterm_lua
     dest: "{{ path_local_config }}/wezterm/wezterm.lua"
+    mode: "0664"

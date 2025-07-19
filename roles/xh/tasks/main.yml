@@ -1,91 +1,94 @@
 - name: Checking if xh is available
-  command: xh --version
+  ansible.builtin.command: xh --version
   register: cmd_xh_installed
-  ignore_errors: True
+  ignore_errors: true
   when: xh_perform_install is undefined
+  changed_when: false
 
 - name: Checking xh version
-  shell: "xh --version | awk 'NR==1 {print $2}'"
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      xh --version | awk 'NR==1 {print $2}'
   register: cmd_xh_version
   when:
     - xh_perform_install is undefined
     - cmd_xh_installed.rc == 0
+  changed_when: false
 
-- set_fact:
-    xh_perform_install: True
+- name: Set xh_perform_install fact
+  ansible.builtin.set_fact:
+    xh_perform_install: true
   when:
     - xh_perform_install is undefined
     - cmd_xh_installed.rc != 0 or cmd_xh_version.stdout != xh_version
 
-- name: Preparing tmp directory
-  tempfile:
-    state: directory
-    suffix: xh
-  register: xh_tmp_dir
+- name: Set up xh
   when: xh_perform_install is defined and xh_perform_install
+  block:
 
-- name: Downloading xh archive
-  get_url:
-    url: "{{ xh_archive_url }}"
-    dest: "{{ xh_tmp_dir.path }}/{{ xh_archive }}"
-  when: xh_perform_install is defined and xh_perform_install
+    - name: Preparing tmp directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: xh
+      register: xh_tmp_dir
 
-- name: Extracting xh archive
-  unarchive:
-    src: "{{ xh_tmp_dir.path }}/{{ xh_archive }}"
-    dest: "{{ xh_tmp_dir.path }}"
-    remote_src: yes
-  when: xh_perform_install is defined and xh_perform_install
+    - name: Downloading xh archive
+      ansible.builtin.get_url:
+        url: "{{ xh_archive_url }}"
+        dest: "{{ xh_tmp_dir.path }}/{{ xh_archive }}"
+        mode: "0644"
 
-- name: Find extracted xh executable
-  find:
-    paths: "{{ xh_tmp_dir.path }}"
-    patterns: "^xh$"
-    recurse: yes
-    use_regex: yes
-  register: xh_find_results
-  when: xh_perform_install is defined and xh_perform_install
+    - name: Extracting xh archive
+      ansible.builtin.unarchive:
+        src: "{{ xh_tmp_dir.path }}/{{ xh_archive }}"
+        dest: "{{ xh_tmp_dir.path }}"
+        remote_src: true
 
-- name: Installing xh
-  command: "cp {{ item.path }} {{ path_local_bin }}/xh"
-  with_items: "{{ xh_find_results.files }}"
-  when: xh_perform_install is defined and xh_perform_install
+    - name: Find extracted xh executable
+      ansible.builtin.find:
+        paths: "{{ xh_tmp_dir.path }}"
+        patterns: "^xh$"
+        recurse: true
+        use_regex: true
+      register: xh_find_results
 
-- name: Ensuring correct executable permissions
-  file:
-    path: "{{ path_local_bin }}/xh"
-    mode: "0775"
-  when: xh_perform_install is defined and xh_perform_install
+    - name: Installing xh
+      ansible.builtin.command: "cp {{ item.path }} {{ path_local_bin }}/xh"
+      with_items: "{{ xh_find_results.files }}"
+      changed_when: true
 
-- name: Creating symlinks to xh binary
-  file:
-    src: "{{ path_local_bin }}/xh"
-    dest: "{{ item }}"
-    state: link
-  loop:
-    - "{{ path_local_bin }}/xhs"
-    - "{{ path_local_bin }}/http"
-    - "{{ path_local_bin }}/https"
-  when: xh_perform_install is defined and xh_perform_install
+    - name: Ensuring correct executable permissions
+      ansible.builtin.file:
+        path: "{{ path_local_bin }}/xh"
+        mode: "0775"
 
-- name: Find bash completion script
-  find:
-    paths: "{{ xh_tmp_dir.path }}"
-    patterns: "^xh.bash$"
-    recurse: yes
-    use_regex: yes
-  register: xh_completion_find_results
-  when: xh_perform_install is defined and xh_perform_install
+    - name: Creating symlinks to xh binary
+      ansible.builtin.file:
+        src: "{{ path_local_bin }}/xh"
+        dest: "{{ item }}"
+        state: link
+      loop:
+        - "{{ path_local_bin }}/xhs"
+        - "{{ path_local_bin }}/http"
+        - "{{ path_local_bin }}/https"
 
-- name: Copying bash completion script
-  copy:
-    src: "{{ item.path }}"
-    dest: "{{ path_shell_config }}/{{ item.path | basename }}"
-  with_items: "{{ xh_completion_find_results.files }}"
-  when: xh_perform_install is defined and xh_perform_install
+    - name: Find bash completion script
+      ansible.builtin.find:
+        paths: "{{ xh_tmp_dir.path }}"
+        patterns: "^xh.bash$"
+        recurse: true
+        use_regex: true
+      register: xh_completion_find_results
 
-- name: Clean up build directory
-  file:
-    path: "{{ xh_tmp_dir.path }}"
-    state: absent
-  when: xh_perform_install is defined and xh_perform_install
+    - name: Copying bash completion script
+      ansible.builtin.copy:
+        src: "{{ item.path }}"
+        dest: "{{ path_shell_config }}/{{ item.path | basename }}"
+        mode: "0664"
+      with_items: "{{ xh_completion_find_results.files }}"
+
+    - name: Clean up build directory
+      ansible.builtin.file:
+        path: "{{ xh_tmp_dir.path }}"
+        state: absent

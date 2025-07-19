@@ -1,14 +1,17 @@
 - name: Create directory for local binaries
-  file:
+  ansible.builtin.file:
     path: "{{ path_local_bin }}"
     state: directory
-    mode: 0755
+    mode: "0755"
 
 - name: Create bashrc
-  template: src=_bashrc dest=~/.bashrc
+  ansible.builtin.template:
+    src: _bashrc
+    dest: ~/.bashrc
+    mode: "0644"
 
 - name: Remove old shell config files
-  file:
+  ansible.builtin.file:
     dest: "{{ item }}"
     state: absent
   loop:
@@ -16,7 +19,7 @@
     - "~/.profile"
 
 - name: Create symlinks for other shell startup files
-  file:
+  ansible.builtin.file:
     src: "~/.bashrc"
     dest: "{{ item }}"
     state: link
@@ -25,35 +28,37 @@
     - "~/.profile"
 
 - name: Installing shell scripts
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ path_local_bin }}/{{ item.path }}"
-    mode: "755"
-  with_filetree: bin/
+    mode: "0755"
+  with_community.general.filetree: bin/
 
 - name: Ensure clean state of modular configuration directory
-  file:
+  ansible.builtin.file:
     path: "{{ path_shell_config }}"
     state: "absent"
 
 - name: Create directory for modular configuration
-  file:
+  ansible.builtin.file:
     path: "{{ path_shell_config }}"
     state: directory
-    mode: 0755
+    mode: "0755"
 
 - name: Copy modular configuration files
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ path_shell_config }}/{{ item.path }}"
-  with_filetree: shell/
+    mode: "0644"
+  with_community.general.filetree: shell/
   when: not item.path is match('os_specific')
 
 - name: Copy host-specific modular configuration files
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ path_shell_config }}/{{ item.path }}"
-  with_filetree: shell/os_specific/
+    mode: "0644"
+  with_community.general.filetree: shell/os_specific/
   when:
     - shell_extra_configs is defined
     - "shell_extra_configs is contains(item.path | basename)"

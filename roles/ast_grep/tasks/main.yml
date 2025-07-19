@@ -1,0 +1,69 @@
+- name: Checking if ast-grep is available
+  ansible.builtin.command: ast-grep --version
+  register: cmd_ast_grep_installed
+  ignore_errors: true
+  when: ast_grep_perform_install is undefined
+  changed_when: false
+
+- name: Checking ast_grep version
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      ast-grep --version | awk 'NR==1 {print $2}'
+  register: cmd_ast_grep_version
+  when:
+    - ast_grep_perform_install is undefined
+    - cmd_ast_grep_installed.rc == 0
+  changed_when: false
+
+- name: Set ast_grep_perform_install fact
+  ansible.builtin.set_fact:
+    ast_grep_perform_install: true
+  when:
+    - ast_grep_perform_install is undefined
+    - cmd_ast_grep_installed.rc != 0 or cmd_ast_grep_version.stdout != ast_grep_version
+
+- name: Set up ast_grep
+  when: ast_grep_perform_install is defined and ast_grep_perform_install
+  block:
+
+    - name: Preparing tmp directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: ast_grep
+      register: ast_grep_tmp_dir
+
+    - name: Downloading ast_grep archive
+      ansible.builtin.get_url:
+        url: "{{ ast_grep_archive_url }}"
+        dest: "{{ ast_grep_tmp_dir.path }}/{{ ast_grep_archive }}"
+        mode: "0644"
+
+    - name: Extracting ast_grep archive
+      ansible.builtin.unarchive:
+        src: "{{ ast_grep_tmp_dir.path }}/{{ ast_grep_archive }}"
+        dest: "{{ ast_grep_tmp_dir.path }}"
+        remote_src: true
+
+    - name: Find extracted ast_grep executable
+      ansible.builtin.find:
+        paths: "{{ ast_grep_tmp_dir.path }}"
+        patterns: "^ast-grep$"
+        recurse: true
+        use_regex: true
+      register: ast_grep_find_results
+
+    - name: Installing ast_grep
+      ansible.builtin.command: "cp {{ item.path }} {{ path_local_bin }}/ast-grep"
+      with_items: "{{ ast_grep_find_results.files }}"
+      changed_when: true
+
+    - name: Ensuring correct executable permissions
+      ansible.builtin.file:
+        path: "{{ path_local_bin }}/ast-grep"
+        mode: "0775"
+
+    - name: Clean up build directory
+      ansible.builtin.file:
+        path: "{{ ast_grep_tmp_dir.path }}"
+        state: absent

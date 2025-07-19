@@ -1,64 +1,69 @@
 - name: Checking if fd is available
-  command: fd --version
+  ansible.builtin.command: fd --version
   register: cmd_fd_installed
-  ignore_errors: True
+  ignore_errors: true
   when: fd_perform_install is undefined
+  changed_when: false
 
 - name: Checking fd version
-  shell: "fd --version | awk 'NR==1 {print $2}'"
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      fd --version | awk 'NR==1 {print $2}'
   register: cmd_fd_version
   when:
     - fd_perform_install is undefined
     - cmd_fd_installed.rc == 0
+  changed_when: false
 
-- set_fact:
-    fd_perform_install: True
+- name: Set fd_perform_install fact
+  ansible.builtin.set_fact:
+    fd_perform_install: true
   when:
     - fd_perform_install is undefined
     - cmd_fd_installed.rc != 0 or cmd_fd_version.stdout != fd_version
 
-- name: Preparing tmp directory
-  tempfile:
-    state: directory
-    suffix: fd
-  register: fd_tmp_dir
+- name: Set up fd
   when: fd_perform_install is defined and fd_perform_install
+  block:
 
-- name: Downloading fd archive
-  get_url:
-    url: "{{ fd_archive_url }}"
-    dest: "{{ fd_tmp_dir.path }}/{{ fd_archive }}"
-  when: fd_perform_install is defined and fd_perform_install
+    - name: Preparing tmp directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: fd
+      register: fd_tmp_dir
 
-- name: Extracting fd archive
-  unarchive:
-    src: "{{ fd_tmp_dir.path }}/{{ fd_archive }}"
-    dest: "{{ fd_tmp_dir.path }}"
-    remote_src: yes
-  when: fd_perform_install is defined and fd_perform_install
+    - name: Downloading fd archive
+      ansible.builtin.get_url:
+        url: "{{ fd_archive_url }}"
+        dest: "{{ fd_tmp_dir.path }}/{{ fd_archive }}"
+        mode: "0644"
 
-- name: Find extracted fd executable
-  find:
-    paths: "{{ fd_tmp_dir.path }}"
-    patterns: "^fd$"
-    recurse: yes
-    use_regex: yes
-  register: fd_find_results
-  when: fd_perform_install is defined and fd_perform_install
+    - name: Extracting fd archive
+      ansible.builtin.unarchive:
+        src: "{{ fd_tmp_dir.path }}/{{ fd_archive }}"
+        dest: "{{ fd_tmp_dir.path }}"
+        remote_src: true
 
-- name: Installing fd
-  command: "cp {{ item.path }} {{ path_local_bin }}/fd"
-  with_items: "{{ fd_find_results.files }}"
-  when: fd_perform_install is defined and fd_perform_install
+    - name: Find extracted fd executable
+      ansible.builtin.find:
+        paths: "{{ fd_tmp_dir.path }}"
+        patterns: "^fd$"
+        recurse: true
+        use_regex: true
+      register: fd_find_results
 
-- name: Ensuring correct executable permissions
-  file:
-    path: "{{ path_local_bin }}/fd"
-    mode: "0775"
-  when: fd_perform_install is defined and fd_perform_install
+    - name: Installing fd
+      ansible.builtin.command: "cp {{ item.path }} {{ path_local_bin }}/fd"
+      with_items: "{{ fd_find_results.files }}"
+      changed_when: true
 
-- name: Clean up build directory
-  file:
-    path: "{{ fd_tmp_dir.path }}"
-    state: absent
-  when: fd_perform_install is defined and fd_perform_install
+    - name: Ensuring correct executable permissions
+      ansible.builtin.file:
+        path: "{{ path_local_bin }}/fd"
+        mode: "0775"
+
+    - name: Clean up build directory
+      ansible.builtin.file:
+        path: "{{ fd_tmp_dir.path }}"
+        state: absent

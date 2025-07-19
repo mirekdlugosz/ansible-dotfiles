@@ -1,5 +1,11 @@
 - name: Create target directory
-  file: path=~/.ipython/profile_default state=directory mode=0755
+  ansible.builtin.file:
+    path: ~/.ipython/profile_default
+    state: directory
+    mode: "0755"
 
 - name: Copy default ipython profile file
-  copy: src=ipython_config dest=~/.ipython/profile_default/ipython_config.py
+  ansible.builtin.copy:
+    src: ipython_config
+    dest: ~/.ipython/profile_default/ipython_config.py
+    mode: "0664"

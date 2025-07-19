@@ -1,23 +1,25 @@
 - name: Create CoC extensions directory
-  file:
+  ansible.builtin.file:
     path: "{{ vim_coc_extensions_dir }}"
     state: directory
-    mode: 0755
+    mode: "0755"
 
 - name: Checking package.json file
-  stat:
+  ansible.builtin.stat:
     path: "{{ vim_coc_extensions_dir }}/package.json"
   register: coc_package_json
 
 - name: Create empty package.json
-  copy:
+  ansible.builtin.copy:
     dest: "{{ vim_coc_extensions_dir }}/package.json"
     content: |
       {"dependencies":{}}
+    mode: "0664"
   when: not coc_package_json.stat.exists
 
 - name: Install CoC extensions
-  command:
+  ansible.builtin.command:
     chdir: "{{ vim_coc_extensions_dir }}"
     cmd: |
       npm install {{ vim_coc_extensions }} {{ vim_coc_extensions_npm_args }}
+  changed_when: true

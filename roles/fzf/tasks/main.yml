@@ -1,64 +1,69 @@
 - name: Checking if fzf is available
-  command: fzf --version
+  ansible.builtin.command: fzf --version
   register: cmd_fzf_installed
-  ignore_errors: True
+  ignore_errors: true
   when: fzf_perform_install is undefined
+  changed_when: false
 
 - name: Checking fzf version
-  shell: "fzf --version | awk 'NR==1 {print $1}'"
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      fzf --version | awk 'NR==1 {print $1}'
   register: cmd_fzf_version
   when:
     - fzf_perform_install is undefined
     - cmd_fzf_installed.rc == 0
+  changed_when: false
 
-- set_fact:
-    fzf_perform_install: True
+- name: Set fzf_perform_install fact
+  ansible.builtin.set_fact:
+    fzf_perform_install: true
   when:
     - fzf_perform_install is undefined
     - cmd_fzf_installed.rc != 0 or cmd_fzf_version.stdout != fzf_version
 
-- name: Preparing tmp directory
-  tempfile:
-    state: directory
-    suffix: fzf
-  register: fzf_tmp_dir
+- name: Set up fzf
   when: fzf_perform_install is defined and fzf_perform_install
+  block:
 
-- name: Downloading fzf archive
-  get_url:
-    url: "{{ fzf_archive_url }}"
-    dest: "{{ fzf_tmp_dir.path }}/{{ fzf_archive }}"
-  when: fzf_perform_install is defined and fzf_perform_install
+    - name: Preparing tmp directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: fzf
+      register: fzf_tmp_dir
 
-- name: Extracting fzf archive
-  unarchive:
-    src: "{{ fzf_tmp_dir.path }}/{{ fzf_archive }}"
-    dest: "{{ fzf_tmp_dir.path }}"
-    remote_src: yes
-  when: fzf_perform_install is defined and fzf_perform_install
+    - name: Downloading fzf archive
+      ansible.builtin.get_url:
+        url: "{{ fzf_archive_url }}"
+        dest: "{{ fzf_tmp_dir.path }}/{{ fzf_archive }}"
+        mode: "0644"
 
-- name: Find extracted fzf executable
-  find:
-    paths: "{{ fzf_tmp_dir.path }}"
-    patterns: "^fzf$"
-    recurse: yes
-    use_regex: yes
-  register: fzf_find_results
-  when: fzf_perform_install is defined and fzf_perform_install
+    - name: Extracting fzf archive
+      ansible.builtin.unarchive:
+        src: "{{ fzf_tmp_dir.path }}/{{ fzf_archive }}"
+        dest: "{{ fzf_tmp_dir.path }}"
+        remote_src: true
 
-- name: Installing fzf
-  command: "cp {{ item.path }} {{ path_local_bin }}/fzf"
-  with_items: "{{ fzf_find_results.files }}"
-  when: fzf_perform_install is defined and fzf_perform_install
+    - name: Find extracted fzf executable
+      ansible.builtin.find:
+        paths: "{{ fzf_tmp_dir.path }}"
+        patterns: "^fzf$"
+        recurse: true
+        use_regex: true
+      register: fzf_find_results
 
-- name: Ensuring correct executable permissions
-  file:
-    path: "{{ path_local_bin }}/fzf"
-    mode: "0775"
-  when: fzf_perform_install is defined and fzf_perform_install
+    - name: Installing fzf
+      ansible.builtin.command: "cp {{ item.path }} {{ path_local_bin }}/fzf"
+      with_items: "{{ fzf_find_results.files }}"
+      changed_when: true
 
-- name: Clean up build directory
-  file:
-    path: "{{ fzf_tmp_dir.path }}"
-    state: absent
-  when: fzf_perform_install is defined and fzf_perform_install
+    - name: Ensuring correct executable permissions
+      ansible.builtin.file:
+        path: "{{ path_local_bin }}/fzf"
+        mode: "0775"
+
+    - name: Clean up build directory
+      ansible.builtin.file:
+        path: "{{ fzf_tmp_dir.path }}"
+        state: absent

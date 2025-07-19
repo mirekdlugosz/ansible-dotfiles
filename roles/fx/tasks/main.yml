@@ -1,46 +1,51 @@
 - name: Check fx
   when: fx_perform_install is undefined
   block:
-  - name: Checking if fx is available
-    command: fx --version
-    register: cmd_fx_installed
-    ignore_errors: True
+    - name: Checking if fx is available
+      ansible.builtin.command: fx --version
+      register: cmd_fx_installed
+      ignore_errors: true
+      changed_when: false
 
-  - name: Checking fx version
-    shell: "fx --version"
-    register: cmd_fx_version
-    when:
-      - cmd_fx_installed.rc == 0
+    - name: Checking fx version
+      ansible.builtin.command: fx --version
+      register: cmd_fx_version
+      when:
+        - cmd_fx_installed.rc == 0
+      changed_when: false
 
-  - set_fact:
-      fx_perform_install: True
-    when:
-      - cmd_fx_installed.rc != 0 or cmd_fx_version.stdout != fx_version
+    - name: Set fx_perform_install fact
+      ansible.builtin.set_fact:
+        fx_perform_install: true
+      when:
+        - cmd_fx_installed.rc != 0 or cmd_fx_version.stdout != fx_version
 
 - name: Install fx
   when: fx_perform_install is defined and fx_perform_install
   block:
 
-  - name: Preparing tmp directory
-    tempfile:
-      state: directory
-      suffix: fx
-    register: fx_tmp_dir
+    - name: Preparing tmp directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: fx
+      register: fx_tmp_dir
 
-  - name: Downloading fx binary
-    get_url:
-      url: "{{ fx_binary_url }}"
-      dest: "{{ fx_tmp_dir.path }}/{{ fx_binary }}"
+    - name: Downloading fx binary
+      ansible.builtin.get_url:
+        url: "{{ fx_binary_url }}"
+        dest: "{{ fx_tmp_dir.path }}/{{ fx_binary }}"
+        mode: "0644"
 
-  - name: Installing fx
-    command: "cp {{ fx_tmp_dir.path }}/{{ fx_binary }} {{ path_local_bin }}/fx"
+    - name: Installing fx
+      ansible.builtin.command: "cp {{ fx_tmp_dir.path }}/{{ fx_binary }} {{ path_local_bin }}/fx"
+      changed_when: true
 
-  - name: Ensuring correct executable permissions
-    file:
-      path: "{{ path_local_bin }}/fx"
-      mode: "0775"
+    - name: Ensuring correct executable permissions
+      ansible.builtin.file:
+        path: "{{ path_local_bin }}/fx"
+        mode: "0775"
 
-  - name: Clean up build directory
-    file:
-      path: "{{ fx_tmp_dir.path }}"
-      state: absent
+    - name: Clean up build directory
+      ansible.builtin.file:
+        path: "{{ fx_tmp_dir.path }}"
+        state: absent

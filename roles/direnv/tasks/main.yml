@@ -1,5 +1,11 @@
 - name: Create target directory
-  file: path={{ direnv_config_dir }} state=directory mode=0755
+  ansible.builtin.file:
+    path: "{{ direnv_config_dir }}"
+    state: directory
+    mode: "0755"
 
 - name: Copy direnvrc file
-  copy: src=direnvrc dest={{ direnv_config_dir }}/direnvrc
+  ansible.builtin.copy:
+    src: direnvrc
+    dest: "{{ direnv_config_dir }}/direnvrc"
+    mode: "0644"

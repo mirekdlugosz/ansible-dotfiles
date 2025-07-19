@@ -1,4 +1,8 @@
-- import_tasks: build.yml
+- name: Build starship
+  ansible.builtin.import_tasks: build.yml
 
 - name: Copy starship.toml
-  copy: src=starship.toml dest="{{ path_local_config }}/starship.toml"
+  ansible.builtin.copy:
+    src: starship.toml
+    dest: "{{ path_local_config }}/starship.toml"
+    mode: "0664"
