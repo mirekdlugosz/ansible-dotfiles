@@ -83,15 +83,12 @@ nvim_lsps:
   - "bashls"
   - "dockerls"
   - "eslint"
-  - "harper_ls"
   - "jedi_language_server"
   - "psalm"
   - "pyright"
-  - "r_language_server"
   - "rust_analyzer"
   - "texlab"
   - "ts_ls"
-  - "volar"
 nvim_lsps_exclude: []
 # }}}
 # {{{ pipx

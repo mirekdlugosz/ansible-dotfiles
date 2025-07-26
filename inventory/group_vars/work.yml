@@ -3,7 +3,6 @@ git_email: mzalewsk@redhat.com
 vim_coc_extensions: "coc-json coc-jedi coc-snippets coc-yaml"
 nvim_lsps_exclude:
   - "intelephense"
-  - "r_language_server"
   - "texlab"
 pipx_perform_install: false
 pipx_packages:
