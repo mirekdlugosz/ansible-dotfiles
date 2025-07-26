@@ -6,6 +6,7 @@
   loop:
     - "{{ nvim_dir }}"
     - "{{ nvim_dir }}/ftplugin/"
+    - "{{ nvim_dir }}/lsp/"
     - "{{ nvim_dir }}/snippets/"
     - "{{ nvim_dir }}/lua/"
     - "{{ nvim_share_dir }}/site/pack/paqs/start/paq-nvim/"

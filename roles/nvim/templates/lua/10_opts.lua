@@ -8,6 +8,12 @@ vim.o.splitright = true
 vim.o.shortmess = vim.o.shortmess .. "c"
 vim.o.completeopt = "menu,menuone,preview,noselect,noinsert"
 vim.o.numberwidth = 3
+-- disable cursor blinking in terminal
+-- this is mostly copy-pasted from `src/nvim/options.lua`
+vim.o.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:block-blinkon0-blinkoff0-TermCursor"
+-- This has implications for Telescope, which-key and possibly many more. For
+-- now it's easier to override it when we want it
+vim.o.winborder = "none"
 
 vim.o.wildmenu = true
 vim.o.wildignore = ".*.sw*,__pycache__,*.pyc"
@@ -31,6 +37,7 @@ vim.o.diffopt = "filler,internal,algorithm:histogram,indent-heuristic,linematch:
 
 vim.diagnostic.config {
     virtual_text = false,
+    virtual_lines = false,
     signs = true,
     underline = false,
 }

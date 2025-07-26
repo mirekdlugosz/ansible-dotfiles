@@ -9,8 +9,12 @@ local lspfunctions = {
     implementation = vim.lsp.buf.implementation,
     type_definition = vim.lsp.buf.type_definition,
     references = vim.lsp.buf.references,
-    hover = vim.lsp.buf.hover,
-    signature_help = vim.lsp.buf.signature_help,
+    hover = function()
+        vim.lsp.buf.hover({ border = "single" })
+    end,
+    signature_help = function()
+        vim.lsp.buf.signature_help({ border = "single" })
+    end,
     rename = vim.lsp.buf.rename,
     code_action = vim.lsp.buf.code_action,
     format = vim.lsp.buf.format,
@@ -367,7 +371,6 @@ if status_ok then
         'confirm_done',
         cmp_autopairs.on_confirm_done()
     )
-    local capabilities = require('cmp_nvim_lsp').default_capabilities()
 end
 
 -- >>>
@@ -384,20 +387,13 @@ end
 -- >>>
 
 -- <<< neovim/nvim-lspconfig
-local status_ok, lspconfig = pcall(require, "lspconfig")
-if status_ok then
-    -- <<< Mappings.
-    -- Some more mappings are defined in on_attach
-    -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-    local opts = { noremap=true, silent=true }
-    vim.keymap.set('n', '<leader>le', vim.diagnostic.open_float, opts)
-    vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-    vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-    -- >>>
-    -- <<< on_attach
-    -- Use an on_attach function to only map the following keys
-    -- after the language server attaches to the current buffer
-    local on_attach = function(client, bufnr)
+-- Since nvim 0.11 nvim-lspconfig provides only raw configuration files, which
+-- are automatically loaded by nvim. Technically you need to call
+-- `vim.lsp.enable()` to tell nvim which servers should be started when opening
+-- a file, but this is already done by mason-lspconfig
+vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(ev)
+        local client = vim.lsp.get_client_by_id(ev.data.client_id)
         local rc = client.server_capabilities
 
         if client.name == 'jedi_language_server' then
@@ -410,11 +406,6 @@ if status_ok then
             rc.definitionProvider = false
         end
 
-        -- Enable completion triggered by <c-x><c-o>
-        vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-        -- Mappings.
-        -- See `:help vim.lsp.*` for documentation on any of the below functions
         local bufopts = { noremap=true, silent=true, buffer=bufnr }
         vim.keymap.set('n', '<leader>lD', lspfunctions["declaration"], bufopts)
         vim.keymap.set('n', '<leader>ld', lspfunctions["definition"], bufopts)
@@ -424,69 +415,12 @@ if status_ok then
         vim.keymap.set('n', '<leader>lr', lspfunctions["references"], bufopts)
         vim.keymap.set('n', '<leader>lK', lspfunctions["hover"], bufopts)
         vim.keymap.set('n', '<leader>lk', lspfunctions["signature_help"], bufopts)
+        vim.keymap.set('i', '<C-k>', lspfunctions["signature_help"], bufopts)
         vim.keymap.set('n', '<leader>lR', lspfunctions["rename"], bufopts)
         vim.keymap.set('n', '<leader>lc', lspfunctions["code_action"], bufopts)
         vim.keymap.set('n', '<leader>lf', lspfunctions["format"], bufopts)
     end
-    -- >>>
-    -- <<< lsp_flags
-    local lsp_flags = {
-        -- This is the default in Nvim 0.7+
-        debounce_text_changes = 150,
-    }
-    --->>>
-    -- <<< servers
-    local lsp_servers = {
-        {% for nvim_lsp in nvim_lsps -%}
-        {% if not nvim_lsp in nvim_lsps_exclude %}
-        '{{ nvim_lsp }}',
-        {% endif %}
-        {%- endfor -%}
-    }
-    local lsp_servers_settings = {
-        pyright = {
-            python = {
-                analysis = {
-                    useLibraryCodeForTypes = true,
-                    diagnosticSeverityOverrides = {
-                        reportGeneralTypeIssues = "none",
-                        reportOptionalMemberAccess = "none",
-                        reportOptionalSubscript = "none",
-                        reportPrivateImportUsage = "none",
-                    },
-                    autoImportCompletions = false,
-                },
-                linting = {
-                    pylintEnabled = false
-                },
-            },
-        },
-    }
-    for _, lspserver in ipairs(lsp_servers) do
-        local setup_opts = {
-            capabilities = capabilities,
-            on_attach = on_attach,
-            flags = lsp_flags,
-        }
-
-        if lsp_servers_settings[lspserver] then
-            opts['settings'] = lsp_servers_settings[lspserver]
-        end
-
-        lspconfig[lspserver].setup(setup_opts)
-    end
-    -- >>>
-end
--- >>>
-
--- <<< ray-x/lsp_signature.nvim
-local status_ok, lsp_signature = pcall(require, "lsp_signature")
-if status_ok then
-    lsp_signature.setup({
-        bind = true,
-        hint_enable = false,
-    })
-end
+})
 -- >>>
 
 -- <<< nvim-treesitter/nvim-treesitter

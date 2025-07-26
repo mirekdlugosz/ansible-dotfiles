@@ -67,7 +67,7 @@ require "paq" {
     -- contains wrappers for many command-line tools, like black
     'nvimtools/none-ls.nvim',
 
-    -- nvim-cmp - expand LSP completions with data from other sources, like
+    -- nvim-cmp - expand completions with data from other sources, like LSP
     -- words in buffer, paths and snippets
     -- also, better keybinding for code completion in insert mode
     'hrsh7th/cmp-nvim-lsp',
@@ -75,9 +75,6 @@ require "paq" {
     'hrsh7th/cmp-path',
     'hrsh7th/nvim-cmp',
     'dcampos/cmp-snippy',
-
-    -- better function signature help
-    'ray-x/lsp_signature.nvim',
 
     -- treesitter understands your file while you edit it
     -- it's used for improved syntax highlighting, folding etc.
