@@ -14,7 +14,7 @@ for vim_cmd in vimx vim; do
     fi
 done
 
-if command -v tmux > /dev/null && [ -z "${TMUX:+x}" ]; then
+if [[ $- == *i* ]] && command -v tmux > /dev/null && [ -z "${TMUX:+x}" ]; then
     exec tmux new-session "$VIM_CMD" "$@"
 else
     exec "$VIM_CMD" "$@"
