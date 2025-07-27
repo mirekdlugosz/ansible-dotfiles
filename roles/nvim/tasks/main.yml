@@ -76,4 +76,8 @@
   ansible.builtin.command: >
       nvim --headless -c 'LspInstall {{ _missing_lsp_servers | join(" ") }}' -c 'qa'
   when: (_missing_lsp_servers | length) >= 1
-  changed_when: true
+  register: _lsp_install
+  failed_when:
+    - _lsp_install.rc > 1
+  changed_when:
+    - (_lsp_install.stderr_lines | length) > 2
