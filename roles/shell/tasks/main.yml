@@ -10,6 +10,12 @@
     dest: ~/.bashrc
     mode: "0644"
 
+- name: Create inputrc
+  ansible.builtin.template:
+    src: _inputrc
+    dest: ~/.inputrc
+    mode: "0644"
+
 - name: Remove old shell config files
   ansible.builtin.file:
     dest: "{{ item }}"
