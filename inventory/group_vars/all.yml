@@ -45,7 +45,7 @@ fzf_git_repo: "https://github.com/junegunn/fzf.git"
 git_email: mirek@mirekdlugosz.com
 # }}}
 # {{{ lazygit
-lazygit_version: "0.53.0"
+lazygit_version: "0.54.0"
 lazygit_vversion: "v{{ lazygit_version }}"
 lazygit_archive: "lazygit_{{ lazygit_version }}_Linux_x86_64.tar.gz"
 lazygit_archive_url: "https://github.com/jesseduffield/lazygit/releases/download/{{ lazygit_vversion }}/{{ lazygit_archive }}"
