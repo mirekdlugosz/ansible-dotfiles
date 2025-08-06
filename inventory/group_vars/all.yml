@@ -99,7 +99,7 @@ pipx_packages:
   jedi-language-server: "*"
   neovim-remote: "*"
   nox: "2025.5.1"
-  poetry: "2.1.3"
+  poetry: "2.1.4"
   reuse: "*"
   uv: "0.7.15"
   # vmmgr is not on PyPI and our current pipx role can't handle installing packages from local source
