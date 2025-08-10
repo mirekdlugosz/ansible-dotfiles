@@ -1,0 +1,4 @@
+- name: New Python installed
+  ansible.builtin.include_tasks: recreate_python_envs.yml
+  when: recreate_python_envs is defined and recreate_python_envs | length >= 1
+  loop: "{{ recreate_python_envs }}"

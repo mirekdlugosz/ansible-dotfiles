@@ -1,0 +1,23 @@
+- name: "Remove old venv directory : {{ item.venv_path }}"
+  ansible.builtin.file:
+    path: "{{ item.venv_path }}"
+    state: absent
+
+- name: "Recreate venv directory : {{ item.venv_path }}"
+  ansible.builtin.command:
+    cmd: |
+      {{ item.python_path }} -m venv "{{ item.venv_path }}"
+  register: _cmd_venv_create
+  changed_when: true
+  failed_when: _cmd_venv_create.rc != 0
+
+- name: "Install the project : {{ item.source_dir }}"
+  ansible.builtin.shell: >
+      . {{ item.venv_path }}/bin/activate &&
+      {{ item.postinstall_cmd }}
+  args:
+    chdir: "{{ item.source_dir }}"
+  register: _cmd_postinstall
+  changed_when: true
+  failed_when: _cmd_postinstall.rc != 0
+  when: item.postinstall_cmd is defined

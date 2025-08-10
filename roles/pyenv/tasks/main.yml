@@ -51,6 +51,7 @@
       when:
         - item not in local_pyenv_versions_result.stdout_lines
       changed_when: true
+      notify: "New Python installed"
 
     - name: Remove manually installed Python versions
       ansible.builtin.shell: "pyenv uninstall -f {{ item }}"

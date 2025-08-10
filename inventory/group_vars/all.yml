@@ -2,6 +2,8 @@ path_local_config: "{{ ansible_env.HOME }}/.config"
 path_local_bin: "{{ ansible_env.HOME }}/.local/bin"
 path_local_share: "{{ ansible_env.HOME }}/.local/share"
 path_shell_config: "{{ path_local_config }}/shell"
+path_virtualenvs: "{{ ansible_env.HOME }}/.virtualenvs"
+path_sources: "{{ ansible_env.HOME }}/sources"
 
 # {{{ custom roles defaults
 # {{{ ack
@@ -114,6 +116,7 @@ pyenv_versions:
   - 3.11.13
   - 3.12.11
   - 3.13.6
+default_pyenv_python_path: "{{ pyenv_local_path }}/versions/{{ pyenv_versions | last }}/bin/python3"
 # }}}
 # {{{ R
 r_local_lib: "{{ ansible_env.HOME }}/.local/lib/R"

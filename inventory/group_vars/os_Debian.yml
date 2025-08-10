@@ -1,5 +1,23 @@
 ack_perform_install: false
 pipx_perform_install: false
+recreate_python_envs:
+  - source_dir: "{{ path_sources }}/mirekdlugosz.com"
+    venv_path: "{{ path_virtualenvs }}/mirekdlugosz.com"
+    python_path: "{{ default_pyenv_python_path }}"
+    postinstall_cmd: >
+      pip install -U pip wheel polars &&
+      pip install -r requirements.txt
+  - source_dir: "{{ path_sources }}/kustosz/server"
+    venv_path: "{{ path_virtualenvs }}/kustosz-server"
+    python_path: "{{ default_pyenv_python_path }}"
+    postinstall_cmd: >
+      poetry install --all-extras
+  - source_dir: "{{ path_sources }}/kustosz/docs"
+    venv_path: "{{ path_virtualenvs }}/kustosz-misc"
+    python_path: "{{ default_pyenv_python_path }}"
+    postinstall_cmd: >
+      pip install -U pip wheel ipdb &&
+      pip install -r requirements.txt
 shell_extra_vars:
   LANG: "pl_PL.UTF-8"
   LC_ALL: "pl_PL.UTF-8"
