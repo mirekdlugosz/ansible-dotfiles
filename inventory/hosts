@@ -1,9 +1,0 @@
-[local]
-localhost
-
-[work]
-rhel-csb
-
-[mydevil]
-mydevil-one
-mydevil-two

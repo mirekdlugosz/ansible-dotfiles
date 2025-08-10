@@ -15,14 +15,14 @@ Finally, I wanted to get some hands-on experience with Ansible, and there's noth
 
 ## Running
 
-Just do everything on all machines:
+Do everything on a current machine (pick inventory file accordingly!):
 
-```
-ansible-playbook playbooks/setup_machine.yml
-```
+    ansible-playbook -i inventory/private playbooks/setup_machine.yml
 
-Usually, I want to limit tasks to execute (`-t` flag) or machines to run on (`-l` flag):
+Limit tasks to execute with `-t` flag:
 
-```
-ansible-playbook -t direnv -l local playbooks/setup_machine.yml
-```
+    ansible-playbook -i inventory/private -t direnv,shell_config playbooks/setup_machine.yml
+
+Or ignore some long-running tasks with `--skip-tags`:
+
+    ansible-playbook -i inventory/private --skip-tags pipx,nvim,vim,rust,pyenv playbooks/setup_machine.yml
