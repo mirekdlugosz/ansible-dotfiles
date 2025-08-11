@@ -18,6 +18,39 @@ pipx_packages:
   uv: "0.7.15"
   vmmgr: "0.1.0"
 
+pyenv_python_312_path: "{{ pyenv_local_path }}/versions/{{ pyenv_versions | select('match', '3\\.12') | last }}/bin/python3"
+recreate_python_envs:
+  - source_dir: "{{ path_sources }}/camayoc"
+    venv_path: "{{ path_virtualenvs }}/camayoc"
+    python_path: "{{ pyenv_python_312_path }}"
+    postinstall_cmd: >
+      uv sync --frozen --group dev --active &&
+      pip install ipython pickleshare ipdb
+  - source_dir: "{{ path_sources }}/discovery-ci"
+    venv_path: "{{ path_virtualenvs }}/discovery-ci"
+    python_path: "{{ pyenv_python_312_path }}"
+    postinstall_cmd: >
+      uv sync --frozen --group dev --active &&
+      pip install ipython pickleshare ipdb
+  - source_dir: "{{ path_sources }}/qpc"
+    venv_path: "{{ path_virtualenvs }}/qpc"
+    python_path: "{{ pyenv_python_312_path }}"
+    postinstall_cmd: >
+      uv sync --frozen --active &&
+      pip install ipython pickleshare ipdb
+  - source_dir: "{{ path_sources }}/quipucords"
+    venv_path: "{{ path_virtualenvs }}/quipucords"
+    python_path: "{{ pyenv_python_312_path }}"
+    postinstall_cmd: >
+      uv sync --frozen --group dev --active &&
+      pip install ipython pickleshare ipdb
+  - source_dir: "{{ path_sources }}/mirekdlugosz.com"
+    venv_path: "{{ path_virtualenvs }}/mirekdlugosz.com"
+    python_path: "{{ default_pyenv_python_path }}"
+    postinstall_cmd: >
+      pip install -U pip wheel polars &&
+      pip install -r requirements.txt
+
 shell_extra_vars:
   BROWSER: "/usr/bin/google-chrome"
   VAGRANT_DEFAULT_PROVIDER: "libvirt"
