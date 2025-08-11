@@ -11,6 +11,12 @@
   changed_when: true
   failed_when: _cmd_venv_create.rc != 0
 
+
+- name: "Check if directory exists : {{ item.source_dir }}"
+  ansible.builtin.stat:
+    path: "{{ item.source_dir }}"
+  register: _source_dir
+
 - name: "Install the project : {{ item.source_dir }}"
   ansible.builtin.shell: >
       . {{ item.venv_path }}/bin/activate &&
@@ -20,4 +26,6 @@
   register: _cmd_postinstall
   changed_when: true
   failed_when: _cmd_postinstall.rc != 0
-  when: item.postinstall_cmd is defined
+  when:
+    - item.postinstall_cmd is defined
+    - _source_dir.stat.exists
