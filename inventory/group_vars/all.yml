@@ -26,7 +26,7 @@ catppuccin_bat_theme_git_repo: "https://github.com/catppuccin/bat.git"
 direnv_config_dir: "{{ path_local_config }}/direnv/"
 # }}}
 # {{{ fd
-fd_version: "10.2.0"
+fd_version: "10.3.0"
 fd_vversion: "v{{ fd_version }}"
 fd_archive: "fd-{{ fd_vversion }}-x86_64-unknown-linux-gnu.tar.gz"
 fd_archive_url: "https://github.com/sharkdp/fd/releases/download/{{ fd_vversion }}/{{ fd_archive }}"
