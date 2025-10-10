@@ -113,8 +113,8 @@ pyenv_local_path: "{{ ansible_env.HOME }}/.pyenv"
 pyenv_git_repo: "https://github.com/pyenv/pyenv.git"
 pyenv_wrapper_script: "{{ pyenv_local_path }}/.ansible_pyenv_wrapper"
 pyenv_versions:
-  - 3.11.13
-  - 3.12.11
+  - 3.11.14
+  - 3.12.12
   - 3.13.8
 default_pyenv_python_path: "{{ pyenv_local_path }}/versions/{{ pyenv_versions | last }}/bin/python3"
 # }}}
