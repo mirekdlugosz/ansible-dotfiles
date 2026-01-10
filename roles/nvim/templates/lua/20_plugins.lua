@@ -46,7 +46,7 @@ require "paq" {
     'folke/which-key.nvim',
 
     -- leap - quickly jump to any place displayed on a screen
-    'ggandor/leap.nvim',
+    { url = 'https://codeberg.org/andyg/leap.nvim.git', as = 'leap.nvim' },
     -- >>>
 
     -- <<< Programming
@@ -80,6 +80,7 @@ require "paq" {
     -- it's used for improved syntax highlighting, folding etc.
     {
         'nvim-treesitter/nvim-treesitter',
+        branch = 'master',
         build = function() require('nvim-treesitter.install').update({ with_sync = true }) end
     },
 
