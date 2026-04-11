@@ -11,7 +11,7 @@ pipx_packages:
   git-filter-repo: "*"
   jedi-language-server: "*"
   neovim-remote: "*"
-  nox: "2026.2.9"
+  nox: "2026.4.10"
   poetry: "2.3.3"
   python-openstackclient: "*"
   reuse: "*"
