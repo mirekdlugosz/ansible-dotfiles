@@ -44,6 +44,12 @@ recreate_python_envs:
     postinstall_cmd: >
       uv sync --frozen --group dev --active &&
       pip install ipython pickleshare ipdb
+  - source_dir: "{{ path_sources }}/quipucordsctl"
+    venv_path: "{{ path_virtualenvs }}/quipucordsctl"
+    python_path: "{{ pyenv_python_312_path }}"
+    postinstall_cmd: >
+      uv sync --frozen --group dev --active &&
+      pip install ipython pickleshare ipdb
   - source_dir: "{{ path_sources }}/mirekdlugosz.com"
     venv_path: "{{ path_virtualenvs }}/mirekdlugosz.com"
     python_path: "{{ default_pyenv_python_path }}"
