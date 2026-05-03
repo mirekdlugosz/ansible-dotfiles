@@ -56,8 +56,6 @@ lazygit_archive_url: "https://github.com/jesseduffield/lazygit/releases/download
 # }}}
 # {{{ nvim
 nvim_dir: "{{ path_local_config }}/nvim/"
-nvim_share_dir: "{{ path_local_share }}/nvim/"
-paq_git_repo: "https://github.com/savq/paq-nvim"
 nvim_treesitter_modules:
   - "bash"
   - "css"

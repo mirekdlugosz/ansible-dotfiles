@@ -9,7 +9,6 @@
     - "{{ nvim_dir }}/lsp/"
     - "{{ nvim_dir }}/snippets/"
     - "{{ nvim_dir }}/lua/"
-    - "{{ nvim_share_dir }}/site/pack/paqs/start/paq-nvim/"
 
 - name: "Copy static modular configuration files"
   ansible.builtin.copy:
@@ -31,20 +30,12 @@
     - "lua/40_keys.lua"
     - "init.lua"
 
-- name: "Clone packer (plugin management tool)"
-  ansible.builtin.git: # noqa: latest
-    repo: "{{ paq_git_repo }}"
-    dest: "{{ nvim_share_dir }}/site/pack/paqs/start/paq-nvim/"
-    depth: "1"
-
 - name: "Install plugins"
   ansible.builtin.command: >
-    nvim --headless -c 'autocmd User PaqDoneSync quitall' -c 'PaqSync'
-  register: _paq_sync
-  failed_when:
-    - "'0 errors' not in _paq_sync.stderr"
+    nvim --headless -c 'lua vim.pack.update(nil, { force = true })' -c 'qa'
+  register: _pack_sync
   changed_when:
-    - "'0 ok' not in _paq_sync.stderr"
+    - "'Installing plugins' in _pack_sync.stderr"
 
 - name: "Install treesitter modules"
   ansible.builtin.command: >

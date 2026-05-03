@@ -1,96 +1,96 @@
 -- vim: fdm=marker fmr=<<<,>>>
 
-require "paq" {
+local hooks = function(ev)
+  local name, kind = ev.data.spec.name, ev.data.kind
+  if name == 'telescope-fzf-native.nvim' and (kind == 'install' or kind == 'update') then
+    vim.system({ 'make' }, { cwd = ev.data.path }):wait()
+  end
+end
+vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
 
-    -- paq can manage itself
-    'savq/paq-nvim',
-
+vim.pack.add({
     -- <<< General editing
     -- better status line
-    'nvim-lualine/lualine.nvim',
+    'https://github.com/nvim-lualine/lualine.nvim',
 
     -- better color scheme
-    { "catppuccin/nvim", as = "catppuccin" },
+    { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
 
     -- Automatically surround by tags, brackets, ...
     --use 'tpope/vim-surround'
     -- Useful keybindings
-    'tpope/vim-unimpaired',
+    'https://github.com/tpope/vim-unimpaired',
 
     -- Auto-insert matching parentheses
-    'windwp/nvim-autopairs',
+    'https://github.com/windwp/nvim-autopairs',
 
     -- Access to file system - must-have on larger projects
-    'preservim/nerdtree',
+    'https://github.com/preservim/nerdtree',
 
     -- Comfortable code commenting
-    'preservim/nerdcommenter',
+    'https://github.com/preservim/nerdcommenter',
 
     -- Visual aid for buffer changes tree
-    'mbbill/undotree',
+    'https://github.com/mbbill/undotree',
 
     -- Sidebar with tags (variables and whatnot)
-    'preservim/tagbar',
+    'https://github.com/preservim/tagbar',
 
     -- remember last cursor position
-    'farmergreg/vim-lastplace',
+    'https://github.com/farmergreg/vim-lastplace',
 
     -- fuzzy-search for files, buffers, errors, ...
     -- first one is a dependency
-    'nvim-lua/plenary.nvim',
-    'nvim-telescope/telescope.nvim',
+    'https://github.com/nvim-lua/plenary.nvim',
+    'https://github.com/nvim-telescope/telescope.nvim',
 
-    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+    'https://github.com/nvim-telescope/telescope-fzf-native.nvim',
 
     -- which-key - available completions for started command
-    'folke/which-key.nvim',
+    'https://github.com/folke/which-key.nvim',
 
     -- leap - quickly jump to any place displayed on a screen
-    { url = 'https://codeberg.org/andyg/leap.nvim.git', as = 'leap.nvim' },
+    { src = 'https://codeberg.org/andyg/leap.nvim.git', name = 'leap.nvim' },
     -- >>>
 
     -- <<< Programming
     -- easier access to terminals
-    "akinsho/toggleterm.nvim",
+    "https://github.com/akinsho/toggleterm.nvim",
 
     -- Snippets
-    'dcampos/nvim-snippy',
-    'honza/vim-snippets',
+    'https://github.com/dcampos/nvim-snippy',
+    'https://github.com/honza/vim-snippets',
 
     -- LSP
     -- ready to use configs
-    "mason-org/mason.nvim",
-    "mason-org/mason-lspconfig.nvim",
-    "neovim/nvim-lspconfig",
+    "https://github.com/mason-org/mason.nvim",
+    "https://github.com/mason-org/mason-lspconfig.nvim",
+    "https://github.com/neovim/nvim-lspconfig",
 
     -- Use lua scripts to provide LSP features
     -- contains wrappers for many command-line tools, like black
-    'nvimtools/none-ls.nvim',
+    'https://github.com/nvimtools/none-ls.nvim',
 
     -- nvim-cmp - expand completions with data from other sources, like LSP
     -- words in buffer, paths and snippets
     -- also, better keybinding for code completion in insert mode
-    'hrsh7th/cmp-nvim-lsp',
-    'hrsh7th/cmp-buffer',
-    'hrsh7th/cmp-path',
-    'hrsh7th/nvim-cmp',
-    'dcampos/cmp-snippy',
+    'https://github.com/hrsh7th/cmp-nvim-lsp',
+    'https://github.com/hrsh7th/cmp-buffer',
+    'https://github.com/hrsh7th/cmp-path',
+    'https://github.com/hrsh7th/nvim-cmp',
+    'https://github.com/dcampos/cmp-snippy',
 
     -- treesitter understands your file while you edit it
     -- it's used for improved syntax highlighting, folding etc.
-    {
-        'nvim-treesitter/nvim-treesitter',
-        branch = 'master',
-        build = function() require('nvim-treesitter.install').update({ with_sync = true }) end
-    },
+    'https://github.com/romus204/tree-sitter-manager.nvim',
 
     -- show diagnostics in window
-    "folke/trouble.nvim",
+    "https://github.com/folke/trouble.nvim",
 
     -- Python PEP-8
-    'Vimjas/vim-python-pep8-indent',
+    'https://github.com/Vimjas/vim-python-pep8-indent',
 
     -- set commentstring for current part of file
-    'JoosepAlviste/nvim-ts-context-commentstring',
+    'https://github.com/JoosepAlviste/nvim-ts-context-commentstring',
     -- >>>
-}
+})

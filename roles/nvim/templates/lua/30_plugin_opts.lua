@@ -52,7 +52,7 @@ if status_ok then
         end,
     }
 end
-vim.cmd.colorscheme "catppuccin"
+vim.cmd.colorscheme "catppuccin-nvim"
 -- >>>
 
 -- <<< nvim-lualine/lualine.nvim
@@ -72,7 +72,7 @@ if status_ok then
     lualine.setup {
         options = {
             icons_enabled = false,
-            theme = "catppuccin",
+            theme = "catppuccin-nvim",
             component_separators = { left = '', right = '' },
             section_separators = { left = '', right = '' },
         },
@@ -425,7 +425,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- >>>
 
 -- <<< nvim-treesitter/nvim-treesitter
-local status_ok, treesitter = pcall(require, "nvim-treesitter.configs")
+local status_ok, treesitter = pcall(require, "tree-sitter-manager")
 if status_ok then
     treesitter.setup {
         ensure_installed = {
@@ -437,15 +437,11 @@ if status_ok then
         },
         sync_install = true,
         auto_install = false,
-        highlight = {
-            enable = true,
-            additional_vim_regex_highlighting = { "python" },
-        },
     }
 
     -- cf. https://github.com/nvim-treesitter/nvim-treesitter/wiki/Installation#packernvim=
     vim.opt.foldmethod = 'expr'
-    vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+    vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 end
 -- >>>
 
