@@ -8,7 +8,7 @@ path_sources: "{{ ansible_env.HOME }}/sources"
 # {{{ custom roles defaults
 # {{{ ack
 ack_git_repo: "https://github.com/beyondgrep/ack3.git"
-ack_version: "v3.9.0"
+ack_version: "v3.10.0"
 # }}}
 # {{{ ast-grep
 ast_grep_version: "0.43.0"
