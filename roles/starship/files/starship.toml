@@ -45,6 +45,9 @@ behind = "⇣${count}"
 [aws]
 disabled = true
 
+[gcloud]
+disabled = true
+
 [nodejs]
 style = "bold cyan"
 
