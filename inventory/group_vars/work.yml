@@ -61,6 +61,7 @@ shell_extra_vars:
   BROWSER: "/usr/bin/google-chrome"
   VAGRANT_DEFAULT_PROVIDER: "libvirt"
   VMMGR_TEMPLATE_IMAGES_POOLS: "VirtualMachines"
+  AWS_PROFILE: "saml"
 
 shell_extra_paths:
   - "{{ path_local_bin }}"
