@@ -69,3 +69,4 @@ shell_extra_paths:
 
 shell_extra_configs:
   - "00_source_etc_bashrc.bash"
+  - "claude_code_vertex.bash"
