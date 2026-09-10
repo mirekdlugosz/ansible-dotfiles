@@ -15,7 +15,7 @@ pipx_packages:
   poetry: "2.4.3"
   python-openstackclient: "*"
   reuse: "*"
-  uv: "0.7.15"
+  uv: "0.12.12"
   vmmgr: "0.1.0"
 
 pyenv_python_312_path: "{{ pyenv_local_path }}/versions/{{ pyenv_versions | select('match', '3\\.12') | last }}/bin/python3"
