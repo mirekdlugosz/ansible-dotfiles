@@ -6,14 +6,12 @@ nvim_lsps_exclude:
   - "texlab"
 pipx_perform_install: false
 pipx_packages:
-  crc-bonfire: "*"
   cookiecutter: "*"
   git-filter-repo: "*"
   jedi-language-server: "*"
   neovim-remote: "*"
   nox: "2026.10.20"
   poetry: "2.5.1"
-  python-openstackclient: "*"
   reuse: "*"
   uv: "0.13.6"
   vmmgr: "0.1.0"
