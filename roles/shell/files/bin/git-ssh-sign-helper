@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-SSH_KEY=$(ssh-add -L)
-if [ "$?" -eq 0 ]; then
-    echo "$SSH_KEY"
-else
-    ssh-add
-    ssh-add -L
-fi
+SSH_KEY_DIR="${SSH_KEY_DIR:-${HOME}/.ssh/}"
+KEY_FORMATS="id_ecdsa id_ecdsa_sk id_ed25519 id_ed25519_sk id_rsa"
+
+for FORMAT in $KEY_FORMATS ; do
+    PUB_FILE="${SSH_KEY_DIR}${FORMAT}.pub"
+    if [ ! -e "$PUB_FILE" ]; then
+        continue
+    fi
+    echo "key::$(cat $PUB_FILE)"
+done
